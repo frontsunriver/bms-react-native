@@ -18,6 +18,7 @@ import NocMoveOut from '../../Screens/Noc_move_out';
 import NocMaintenance from '../../Screens/Noc_maintenance';
 import ReportIssues from '../../Screens/Report_issue';
 import Messages from '../../Screens/Messages';
+import MessageDetail from '../../Screens/Messages/detail';
 import Settings from '../../Screens/Settings';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -169,6 +170,15 @@ export default props => {
         }}
         name={Routes.MESSAGES_SCREEN}
         component={Messages}
+      />
+      <Stack.Screen
+        options={{
+          header: () => (
+          <HeaderScreen type="back" title1={t('message_detail')}/>
+        ),
+        }}
+        name={Routes.MESSAGES_DETAIL_SCREEN}
+        component={MessageDetail}
       />
       <Stack.Screen
         options={{
