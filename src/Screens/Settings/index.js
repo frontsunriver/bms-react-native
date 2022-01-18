@@ -28,6 +28,10 @@ const Settings = ({routes, navigation}) => {
     setUser(JSON.parse(await AsyncStorage.getItem('USER_INFO')));
   }, [])
 
+  const objCast = (obj) => {
+    return obj.name;
+  }
+
   const selectPassport = async () => {
     try {
       const res = await DocumentPicker.pick({
@@ -71,7 +75,7 @@ const Settings = ({routes, navigation}) => {
       formData.append('address', address);
       is_submit = true;
     }
-    if(passport != null) {
+    if(passport) {
       formData.append('passport', passport);
       is_submit = true;
     }
@@ -88,7 +92,6 @@ const Settings = ({routes, navigation}) => {
         setEmail('');
       }).catch(err => {
         showErrorToast('Something went wrong! Please try again.');
-        console.warn(err);
       });
     }else {
       showInfoToast('Please insert the information that you want change.');
