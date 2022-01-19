@@ -5,16 +5,19 @@ import useAppTheme from '../Themes/Context';
 import useTranslation from '../i18n';
 import NavigationService from '../Navigation';
 import Routes from '../Navigation/Routes';
+import { useNavigation } from '@react-navigation/native';
 
 const HeaderScreen = (props) => {
+    const navigation = useNavigation();
     const {t} = useTranslation();
     const {theme} = useAppTheme();
-    const {title1, title2, type} = props;
+    const {title1, title2, type, association} = props;
     const [height, setHeight] = useState(0);
     const [double, setDouble] = useState(false);
     const [iconType, setIconType] = useState('back');
     const drawIcon = parseIconFromClassName('fas fa-bars')
     const leftIcon = parseIconFromClassName('fas fa-chevron-left')
+    
     useEffect(() => {
         console.log(props);
         if(title2) {
@@ -48,6 +51,15 @@ const HeaderScreen = (props) => {
         setIconType('back');
       }
     }, [type] )
+
+    const handleBack = () => {
+      if(type == 'home') {
+        NavigationService.navigate(association ? Routes.ASSOCIATION_REQUEST_SCREEN : Routes.HOME_SCREEN)
+      }else {
+        navigation.goBack();
+      }
+    }
+
     const renderHeaderString = () => {
         if(double) {
           return (
@@ -97,10 +109,9 @@ const HeaderScreen = (props) => {
           </TouchableOpacity>
         )
       }else {
+
         return (
-          <TouchableOpacity onPress={() => {
-            NavigationService.navigate(Routes.HOME_SCREEN)
-          }}>
+          <TouchableOpacity onPress={handleBack}>
             <FontAwesome icon={leftIcon} style={{color: theme.colors.primary, fontSize: 20}} />
           </TouchableOpacity>
         )

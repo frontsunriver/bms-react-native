@@ -96,8 +96,6 @@ const Settings = ({routes, navigation}) => {
     }else {
       showInfoToast('Please insert the information that you want change.');
     }
-
-
   }
   return (
       <LoadingActionContainer fixed>

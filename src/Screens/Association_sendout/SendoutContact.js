@@ -17,124 +17,16 @@ import Toast from 'react-native-tiny-toast';
 import NavigationService from '../../Navigation';
 import Routes from '../../Navigation/Routes';
 
-const ReportIssues = ({routes, navigation}) => {
+const SendAnnounce = ({route, navigation}) => {
   const {t} = useTranslation();
   const {theme} = useAppTheme();
+  const {data} = route.params;
   const [user, setUser] = useState({});
-  const [singleFile, setSingleFile] = useState(null);
   const [summary, setSummary] = useState('');
 
   useEffect( async () => {
     setUser(JSON.parse(await AsyncStorage.getItem('USER_INFO')));
-    requestCameraPermission();
   }, [])
-
-  useEffect(() => {
-    showButton();
-  }, [singleFile])
-
-  const requestCameraPermission = async () => {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.CAMERA,
-        {
-          title: "App Camera Permission",
-          message:"App needs access to your camera ",
-          buttonNeutral: "Ask Me Later",
-          buttonNegative: "Cancel",
-          buttonPositive: "OK"
-        }
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log("Camera permission given");
-      } else {
-        console.log("Camera permission denied");
-      }
-    } catch (err) {
-      console.warn(err);
-    }
-  };
-
-  const showButton = () => {
-    if(singleFile == null) {
-      return(
-        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-          <TouchableOpacity
-            activeOpacity={0.5}
-            onPress={selectFile}>
-            <View style={styles.dateTouchable}>
-              <Text>Select File</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-      )
-    }else {
-      return (
-        <></>
-      )
-    }
-  }
-
-  const selectFile = () => {
-    let options = {
-      title: 'Select Image',
-      customButtons: [
-        {
-          name: 'customOptionKey',
-          title: 'Choose Photo from Custom Option'
-        },
-      ],
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-    };
-    launchCamera(options, (response) => {
-      console.log('Response = ', response);
-
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log(
-          'User tapped custom button: ',
-          response.customButton
-        );
-        alert(response.customButton);
-      } else {
-        // You can also display the image using data:
-        // let source = {
-        //   uri: 'data:image/jpeg;base64,' + response.data
-        // };
-        console.log(response.assets[0])
-        var fileObj = response.assets[0];
-        fileObj.name = fileObj.fileName;
-        setSingleFile(fileObj);
-      }
-    });
-  }
-
-  const objCast = (obj) => {
-    return obj.fileName;
-  }
-
-  const renderImage = () => {
-    if(singleFile != null){
-      return (
-        <View style={{flexDirection: 'row', justifyContent: 'center', marginTop: 15}}>
-          <TouchableOpacity onPress={selectFile}>
-            <Image source={{uri:singleFile.uri}} style={{width: 200, height: 200}}></Image>
-          </TouchableOpacity>
-        </View>
-      )
-    }else {
-      return (
-        <></>
-      )
-    }
-    
-  }
 
   const submitHandle = async () => {
     Keyboard.dismiss();
@@ -145,15 +37,13 @@ const ReportIssues = ({routes, navigation}) => {
 
     var formData = new FormData();
     formData.append('content', summary);
-    formData.append('photofile', singleFile);
-    formData.append('user_id', user.id);
-    formData.append('type', 1);
+    formData.append('user_id', data.id);
+    formData.append('type', 3);
 
     await axios.post(`${BASE_URL}notify/add`, formData,
     { headers: { 'Content-Type': 'multipart/form-data', 'X-Requested-With': 'XMLHttpRequest', }}).then(res => { 
       console.log(res.data);
       setSummary('');
-      setSingleFile(null);
       showSuccessToast('Your request is sent successfully. Please wait for the reply.');
     }).catch(err => {
       showErrorToast('Something went wrong! Please try again.');
@@ -169,14 +59,6 @@ const ReportIssues = ({routes, navigation}) => {
     
     if(summary == '') {
       message = "Please insert the issue summary";
-      result = false;
-      res['success'] = result;
-      res['message'] = message;
-      return res;
-    }
-
-    if(!singleFile) {
-      message = "Please select the images";
       result = false;
       res['success'] = result;
       res['message'] = message;
@@ -202,16 +84,12 @@ const ReportIssues = ({routes, navigation}) => {
                   <TextInput
                     style={styles.textfield}
                     placeholder="Please write issues"
-                    numberOfLines={5}
+                    numberOfLines={10}
                     value={summary}
                     multiline={true}
                     onChangeText={text => setSummary(text)}
                   />
                 </View>
-                <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-                  {renderImage()}
-                </View>
-                {showButton()}
                 <View style={{flexDirection: 'row', justifyContent: 'center', marginTop: 15}}>
                   <Button
                     mode="contained"
@@ -225,7 +103,7 @@ const ReportIssues = ({routes, navigation}) => {
                         textAlign: 'center',
                         color: theme.colors.primary
                       }}>
-                      {t('submit')}
+                      SUBMIT
                     </Text>
                   </Button>
                 </View>
@@ -233,7 +111,6 @@ const ReportIssues = ({routes, navigation}) => {
             </View>
             <Toast />
           </ScrollView>
-          <FooterScreen />
         </Container>
       </LoadingActionContainer>
   );
@@ -308,4 +185,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default ReportIssues;
+export default SendAnnounce;

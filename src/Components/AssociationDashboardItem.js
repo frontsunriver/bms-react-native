@@ -1,27 +1,29 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import NumberFormat from 'react-number-format'
 import theme from '../Themes/configs/default'
-import NavigationService from '../Navigation'
 import Routes from '../Navigation/Routes'
+import { useNavigation } from '@react-navigation/native'
 
-const DashboardItem = (props) => {
+
+const AssociationDashboardItem = (props) => {
     const {type, data} = props;
+    const navigation = useNavigation();
     const [statusColor, setStatusColor] = useState({color: theme.colors.background});
     const [statusText, setStatusText] = useState('Pending');
     useEffect(() => {
-        console.log(data);
         if(data.status == 2) {
             setStatusText('Approved');
             setStatusColor({color: '#00E01A'});
-        }else if(data.status == 3) {
-            setStatusText('Rejected');
-            setStatusColor({color: '#F11717'});
         }
     }, [])
 
+    const showDetail = () => {
+        navigation.navigate(Routes.ASSOCIATION_REQUEST_DETAIL, {data: data})
+    }
+
     return (
+        <TouchableOpacity onPress={showDetail}>
         <View
         style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 20, borderBottomColor: '#e2e2e2', borderBottomWidth: 0.8}}>
             <View style={{flexDirection: 'column', alignItems: 'flex-start', alignContent: 'center'}}>
@@ -38,7 +40,8 @@ const DashboardItem = (props) => {
                 <Text>{data.user_id}</Text>
             </View>
         </View>
+        </TouchableOpacity>
     )
 }
 
-export default DashboardItem
+export default AssociationDashboardItem

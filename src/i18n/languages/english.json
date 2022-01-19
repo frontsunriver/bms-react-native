@@ -21,5 +21,7 @@
     "noc_maintenance_dashboard": "NOC MAINTENANCE DASHBOARD",
     "report_issue": "REPORT ISSUE",
     "btn_messages": "MESSAGES",
-    "message_detail": "MESSAGE DETAIL"
+    "message_detail": "MESSAGE DETAIL",
+    "view_request": "VIEW ANY REQUEST",
+    "view_any_request_detail" : "VIEW ANY REQUEST DETAIL"
 }
