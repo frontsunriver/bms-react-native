@@ -11,7 +11,7 @@ const AssociationFooterScreen = () => {
     const {t} = useTranslation();
 
     const goMoveIn = () => {
-        NavigationService.navigate(Routes.NOC_MOVE_IN_DASHBOARD_SCREEN);
+        NavigationService.navigate(Routes.ASSOCIATION_REQUEST_SCREEN);
     }
 
     const goMoveOut = () => {

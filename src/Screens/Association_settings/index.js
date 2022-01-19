@@ -81,7 +81,7 @@ const Settings = ({routes, navigation}) => {
                       mode="contained"
                       style={{borderRadius: 5, marginLeft: 30, marginRight: 30, padding: 5}}
                       color={theme.colors.background}
-                      onPress={() => {navigation.navigate(Routes.ASSOCIATION_ADD_BUILDINGS)}}
+                      onPress={() => {navigation.navigate(Routes.ASSOCIATION_GET_ALL_BUILDINGS)}}
                     >
                       <Text
                         style={{

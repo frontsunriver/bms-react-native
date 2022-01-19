@@ -16,10 +16,13 @@ import AssociationRequestDetail from '../../Screens/Association_home/Detail';
 import AssociationSendOut from '../../Screens/Association_sendout/dashboard';
 import AssociationSendOutDetail from '../../Screens/Association_sendout/SendoutContact';
 import AssociationSettings from '../../Screens/Association_settings';
+import GetAllBuildings from '../../Screens/Association_settings/GetAllBuildings';
+import GetAllUnits from '../../Screens/Association_settings/GetAllUnits';
 import AddBuilding from '../../Screens/Association_settings/AddBuilding';
+import AddUnit from '../../Screens/Association_settings/AddUnit';
 import OwnerDetail from '../../Screens/Association_settings/OwnerDetail';
 import ManageOwners from '../../Screens/Association_settings/ManageOwners';
-import ReportIssues from '../../Screens/Report_issue';
+import Report from '../../Screens/Association_Report';
 import Messages from '../../Screens/Messages';
 import Settings from '../../Screens/Settings';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -85,9 +88,27 @@ export default props => {
       />
 
       <Stack.Screen
+        options={{ header: () => ( <HeaderScreen association="true" type="back" title1="ALL BUILDINGS"/> )}}
+        name={Routes.ASSOCIATION_GET_ALL_BUILDINGS}
+        component={GetAllBuildings}
+      />
+
+      <Stack.Screen
+        options={{ header: () => ( <HeaderScreen association="true" type="back" title1="ALL UNITS"/> )}}
+        name={Routes.ASSOCIATION_GET_UNIT_LIST}
+        component={GetAllUnits}
+      />
+
+      <Stack.Screen
         options={{ header: () => ( <HeaderScreen association="true" type="back" title1="ADD BUILDING"/> )}}
         name={Routes.ASSOCIATION_ADD_BUILDINGS}
         component={AddBuilding}
+      />
+
+      <Stack.Screen
+        options={{ header: () => ( <HeaderScreen association="true" type="back" title1="ADD UNIT"/> )}}
+        name={Routes.ASSOCIATION_ADD_UNITS}
+        component={AddUnit}
       />
 
       <Stack.Screen
@@ -103,9 +124,9 @@ export default props => {
       />
 
       <Stack.Screen
-        options={{ header: () => ( <HeaderScreen association="true" type="back" title1={t('report_issue')}/> )}}
-        name={Routes.REPORT_ISSUES_SCREEN}
-        component={ReportIssues}
+        options={{ header: () => ( <HeaderScreen association="true" type="back" title1='REPORT'/> )}}
+        name={Routes.ASSOCIATION_REPORT_SCREEN}
+        component={Report}
       />
 
       <Stack.Screen
