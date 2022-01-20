@@ -84,7 +84,6 @@ const OwnerDetail = ({route, navigation}) => {
     }
     await axios.post(dataUrl, formData,
     { headers: { 'Content-Type': 'multipart/form-data', 'X-Requested-With': 'XMLHttpRequest', }}).then(res => { 
-      console.log(res.data);
       setAddress('');
       setFirstName('');
       setLastName('');
@@ -94,7 +93,6 @@ const OwnerDetail = ({route, navigation}) => {
       navigate.goBack();
     }).catch(err => {
       showErrorToast('Something went wrong! Please try again.');
-      console.warn(err);
     });
   }
 

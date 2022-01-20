@@ -49,7 +49,6 @@ const A_Search = ({route, navigation}) => {
   useEffect(async () => {
     if(searchQuery != ''){
       await axios.post(`${BASE_URL}user/search`, {query: searchQuery}).then(res => { 
-        console.log(res.data.data);
         if(res.data.success) {
           if(res.data.data.length > 0){
             setServerData(res.data.data);
@@ -58,7 +57,6 @@ const A_Search = ({route, navigation}) => {
           }
         }
       }).catch(err => {
-        console.log(err);
       });  
     }else {
       setServerData([]);

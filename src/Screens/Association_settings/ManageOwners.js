@@ -33,7 +33,6 @@ const ManageOwners = ({route, navigation}) => {
         }
       }
     }).catch(err => {
-      console.log(err);
     });
   }, [isFocused]);
 

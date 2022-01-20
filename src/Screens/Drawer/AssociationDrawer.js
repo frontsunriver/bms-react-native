@@ -37,7 +37,6 @@ const Content = () => {
 
   useEffect( async () => {
     var userInfo = JSON.parse(await AsyncStorage.getItem('USER_INFO'));
-    console.log(userInfo);
     setUser(userInfo);
   }, []);
 

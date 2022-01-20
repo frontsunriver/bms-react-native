@@ -56,7 +56,6 @@ const Detail = ({route, navigation}) => {
                             style={{borderRadius: 5, padding: 2, marginLeft: 5, marginRight: 5}}
                             color={theme.colors.background}
                             onPress={() => {
-                                console.log(item)
                                 navigate.navigate(Routes.ASSOCIATION_ANNOUNCE_SEND_OFFER, {data: item})
                             }}
                         >

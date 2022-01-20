@@ -41,7 +41,6 @@ const NocMoveIn = ({routes, navigation}) => {
         }
       }
     }).catch(err => {
-      console.log(err);
     });
     // await axios.post(`${BASE_URL}/unit/getList`).then( res => {
     //   if(res.data.success) {
@@ -83,13 +82,11 @@ const NocMoveIn = ({routes, navigation}) => {
   };
 
   useEffect( () => {
-    console.log(dropdown);
     axios.post(`${BASE_URL}/unit/getList`, {building_id: dropdown}).then( res => {
       if(res.data.success) {
         setUnitData(res.data.data);
       }
     }).catch(err => {
-      console.log(err);
     });
   }, [dropdown])
 
@@ -104,7 +101,6 @@ const NocMoveIn = ({routes, navigation}) => {
         // DocumentPicker.types.audio
         // DocumentPicker.types.pdf
       });
-      console.log('res : ' + JSON.stringify(res));
       setSingleFile(res[0]);
     } catch (err) {
       setSingleFile(null);
@@ -138,12 +134,10 @@ const NocMoveIn = ({routes, navigation}) => {
 
     await axios.post(`${BASE_URL}maintenances/add`, formData,
     { headers: { 'Content-Type': 'multipart/form-data', 'X-Requested-With': 'XMLHttpRequest', }}).then(res => { 
-      console.log(res.data);
       showSuccessToast('Your request is sent successfully. Please wait for the reply.');
       NavigationService.navigate(Routes.NOC_MAINTENANCE_DASHBOARD_SCREEN);
     }).catch(err => {
       showErrorToast('Something went wrong! Please try again.');
-      console.warn(err);
     });
   }
 
@@ -214,7 +208,6 @@ const NocMoveIn = ({routes, navigation}) => {
                     value={dropdown}
                     onChange={item => {
                     setDropdown(item.id);
-                        console.log('selected', item);
                     }}
                     // renderLeftIcon={() => (
                     //     <Image style={styles.icon} source={require('./assets/account.png')} />
@@ -238,7 +231,6 @@ const NocMoveIn = ({routes, navigation}) => {
                     value={unitDropDown}
                     onChange={item => {
                     setUnitDropDown(item.id);
-                        console.log('selected', item);
                     }}
                     // renderLeftIcon={() => (
                     //     <Image style={styles.icon} source={require('./assets/account.png')} />

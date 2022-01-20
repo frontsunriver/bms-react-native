@@ -48,7 +48,6 @@ const NocMoveIn = ({routes, navigation}) => {
         }
       }
     }).catch(err => {
-      console.log(err);
     });
     if(isMounted) {
       setUser(JSON.parse(await AsyncStorage.getItem('USER_INFO')));
@@ -86,13 +85,11 @@ const NocMoveIn = ({routes, navigation}) => {
   };
 
   useEffect( () => {
-    console.log(dropdown);
     axios.post(`${BASE_URL}/unit/getList`, {building_id: dropdown}).then( res => {
       if(res.data.success) {
         setUnitData(res.data.data);
       }
     }).catch(err => {
-      console.log(err);
     });
   }, [dropdown])
 
@@ -107,7 +104,6 @@ const NocMoveIn = ({routes, navigation}) => {
         // DocumentPicker.types.audio
         // DocumentPicker.types.pdf
       });
-      console.log('res : ' + JSON.stringify(res));
       setSingleFile(res[0]);
     } catch (err) {
       setSingleFile(null);
@@ -125,7 +121,6 @@ const NocMoveIn = ({routes, navigation}) => {
       const res = await DocumentPicker.pick({
         type: [DocumentPicker.types.allFiles],
       });
-      console.log('res : ' + res);
       setDeedFile(res[0]);
     } catch (err) {
       setDeedFile(null);
@@ -143,7 +138,6 @@ const NocMoveIn = ({routes, navigation}) => {
       const res = await DocumentPicker.pick({
         type: [DocumentPicker.types.allFiles],
       });
-      console.log('res : ' + res[0].name);
       setContract(res[0]);
     } catch (err) {
       setContract(null);
@@ -161,7 +155,6 @@ const NocMoveIn = ({routes, navigation}) => {
       const res = await DocumentPicker.pick({
         type: [DocumentPicker.types.allFiles],
       });
-      console.log('res : ' + res);
       setPassport(res[0]);
     } catch (err) {
       setPassport(null);
@@ -179,7 +172,6 @@ const NocMoveIn = ({routes, navigation}) => {
       const res = await DocumentPicker.pick({
         type: [DocumentPicker.types.allFiles],
       });
-      console.log('res : ' + res);
       setVisa(res[0]);
     } catch (err) {
       setVisa(null);
@@ -197,7 +189,6 @@ const NocMoveIn = ({routes, navigation}) => {
       const res = await DocumentPicker.pick({
         type: [DocumentPicker.types.allFiles],
       });
-      console.log('res : ' + res);
       setEmirate(res[0]);
     } catch (err) {
       setEmirate(null);
@@ -240,12 +231,10 @@ const NocMoveIn = ({routes, navigation}) => {
 
     await axios.post(`${BASE_URL}move/add`, formData,
     { headers: { 'Content-Type': 'multipart/form-data', 'X-Requested-With': 'XMLHttpRequest', }}).then(res => { 
-      console.log(res.data);
       showSuccessToast('Your request is sent successfully. Please wait for the reply.');
       NavigationService.navigate(Routes.NOC_MOVE_IN_DASHBOARD_SCREEN);
     }).catch(err => {
       showErrorToast('Something went wrong! Please try again.');
-      console.warn(err);
     });
   }
 

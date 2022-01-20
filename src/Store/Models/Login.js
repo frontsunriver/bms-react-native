@@ -45,7 +45,6 @@ const loginUser = thunk(async (actions, payload, {dispatch}) => {
   setTimeout(() => {
     actions.updateStatus(response.status ? STATUS.SUCCESS : STATUS.FAILED);
     if (!response.status) {
-      console.warn(response.error);
     } else {
       actions.changeAppState(APP_STATE.PRIVATE);
     }

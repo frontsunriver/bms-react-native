@@ -41,7 +41,6 @@ const Settings = ({routes, navigation}) => {
       const res = await DocumentPicker.pick({
         type: [DocumentPicker.types.allFiles],
       });
-      console.log('res : ' + res);
       setPassport(res[0]);
     } catch (err) {
       setPassport(null);
@@ -87,7 +86,6 @@ const Settings = ({routes, navigation}) => {
     if(is_submit) {
       await axios.post(`${BASE_URL}user/update`, formData,
       { headers: { 'Content-Type': 'multipart/form-data', 'X-Requested-With': 'XMLHttpRequest', }}).then(res => { 
-        console.log(res.data);
         showSuccessToast('Your account has been changed.');
         setPassport(null);
         setPassword('');

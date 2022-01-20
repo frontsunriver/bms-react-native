@@ -42,13 +42,11 @@ const AddBuilding = ({routes, navigation}) => {
 
     await axios.post(`${BASE_URL}building/add`, formData,
     { headers: { 'Content-Type': 'multipart/form-data', 'X-Requested-With': 'XMLHttpRequest', }}).then(res => { 
-      console.log(res.data);
       setAddress('');
       setName('');
       showSuccessToast('Your request is sent successfully. Please wait for the reply.');
     }).catch(err => {
       showErrorToast('Something went wrong! Please try again.');
-      console.warn(err);
     });
   }
 

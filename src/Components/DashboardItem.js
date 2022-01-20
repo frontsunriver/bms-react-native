@@ -11,7 +11,6 @@ const DashboardItem = (props) => {
     const [statusColor, setStatusColor] = useState({color: theme.colors.background});
     const [statusText, setStatusText] = useState('Pending');
     useEffect(() => {
-        console.log(data);
         if(data.status == 2) {
             setStatusText('Approved');
             setStatusColor({color: '#00E01A'});

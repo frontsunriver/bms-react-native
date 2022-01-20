@@ -66,7 +66,6 @@ export default () => {
     }
 
     axios.post(`${BASE_URL}/user/login`, {email: username, password: password}).then( res => {
-      console.log(res.data);
       if(res.data.success) {
         showSuccessToast('Login success.');
         AsyncStorage.setItem("USER_INFO", JSON.stringify(res.data.data));
@@ -77,7 +76,6 @@ export default () => {
       }
     }).catch( err => {
       setLoading(false);
-      console.log(err);
       showErrorToast('Server Error. Please try again.');
     });
   };

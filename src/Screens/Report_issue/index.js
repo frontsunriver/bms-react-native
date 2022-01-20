@@ -50,12 +50,9 @@ const ReportIssues = ({routes, navigation}) => {
         }
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log("Camera permission given");
       } else {
-        console.log("Camera permission denied");
       }
     } catch (err) {
-      console.warn(err);
     }
   };
 
@@ -94,24 +91,16 @@ const ReportIssues = ({routes, navigation}) => {
       },
     };
     launchCamera(options, (response) => {
-      console.log('Response = ', response);
 
       if (response.didCancel) {
-        console.log('User cancelled image picker');
       } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
       } else if (response.customButton) {
-        console.log(
-          'User tapped custom button: ',
-          response.customButton
-        );
-        alert(response.customButton);
+        
       } else {
         // You can also display the image using data:
         // let source = {
         //   uri: 'data:image/jpeg;base64,' + response.data
         // };
-        console.log(response.assets[0])
         var fileObj = response.assets[0];
         fileObj.name = fileObj.fileName;
         setSingleFile(fileObj);
@@ -161,7 +150,6 @@ const ReportIssues = ({routes, navigation}) => {
       showSuccessToast('Your request is sent successfully. Please wait for the reply.');
     }).catch(err => {
       showErrorToast('Something went wrong! Please try again.');
-      console.warn(err);
     });
   }
 

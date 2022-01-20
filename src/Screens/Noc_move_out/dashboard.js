@@ -36,7 +36,6 @@ const Dashboard = ({routes, navigation}) => {
         }
       }
     }).catch(err => {
-      console.log(err);
     });
     return () => { isMounted = false };
   }, []);

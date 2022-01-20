@@ -23,12 +23,10 @@ const Detail = ({route, navigation}) => {
     await axios.post(`${BASE_URL}/messages/getList`, {notify_id: data.id}).then( res => {
       if (isMounted) {
         if(res.data.success) {
-          console.log(res.data);
             setServerData(res.data.data);
           }
       }
     }).catch(err => {
-        console.log(err);
     });
     return () => { isMounted = false };
   }, [])

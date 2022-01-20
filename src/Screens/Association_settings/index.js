@@ -46,7 +46,6 @@ const Settings = ({routes, navigation}) => {
           setSingleFile(null);
         }else {
           setLoading(false);
-          console.log(res);
           showErrorToast(res.data.message);
         }
       }).catch(err => {

@@ -16,16 +16,18 @@ import NavigationService from '../../Navigation/index';
 import Routes from '../../Navigation/Routes/index';
 
 import useAppTheme from '../../Themes/Context';
-import useAuth from '../../Services/Auth';
-import {showInfoToast} from '../../Lib/Toast';
+import {showInfoToast, showErrorToast, showSuccessToast} from '../../Lib/Toast';
 import BottomPanel from '../../Components/Panel';
+import { Button } from 'react-native-paper';
 import useTranslation from '../../i18n';
-import Fonts from '../../Themes/Fonts';
+import Toast from 'react-native-tiny-toast';
+import axios from 'axios';
+import { BASE_URL } from '../../Config';
 
 export default () => {
   const {theme} = useAppTheme();
   const {t} = useTranslation();
-
+  const [loading, setLoading] = useState(false);
   const [firstname, setFirstName] = useState('');
   const [lastname, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -46,20 +48,40 @@ export default () => {
   }
 
   const registerUser = () => {
-    console.log(1);
-    if(!firstname || !lastname || !email || !password) {
+
+    Keyboard.dismiss();
+    setLoading(true);
+    const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if(!reg.test(email)) {
+      showErrorToast('Please insert Correct Email format');
+      setLoading(false);
       return;
     }
-    console.log(2);
-    setStatus(true);
+    if (!firstname || !lastname || !email || !password) {
+      showErrorToast('Username and password are mandatory, try again !');
+      setLoading(false);
+      return;
+    }
+
+    axios.post(`${BASE_URL}/user/register`, {first_name: firstname, last_name: lastname, email: email, password: password}).then( res => {
+      if(res.data.success) {
+        showSuccessToast(res.data.message);
+        NavigationService.navigate(Routes.LOGIN_SCREEN);
+      }else {
+        setLoading(false);
+        showErrorToast(res.data.message);
+      }
+    }).catch( err => {
+      setLoading(false);
+      showErrorToast('Server Error. Please try again.');
+    });
+    
   }
 
   const goLogin = () => {
     NavigationService.navigate(Routes.LOGIN_SCREEN);
     // this.props.navigation.navigate('REGISTER_SCREEN');
   }
-
-  const loading = status === STATUS.FETCHING;
 
   return (
     <Container>
@@ -136,14 +158,22 @@ export default () => {
           />
         </Section>
         <Section>
-          <ButtonX
+          <Button
             loading={loading}
-            dark={true}
-            style={{borderRadius: 30}}
+            mode="contained"
+            style={{borderRadius: 30, marginLeft: 30, marginRight: 30, padding: 5}}
             color={loading ? theme.colors.accent : theme.colors.primary}
             onPress={registerUser}
-            label={t('register')}
-          />
+          >
+            <Text
+              style={{
+                fontSize: 15,
+                textAlign: 'center',
+                color: theme.colors.primaryText
+              }}>
+              {t('register')}
+            </Text>
+          </Button>
           <View style={{alignItems: 'center', marginTop: 10}}>
             <View style={{flexDirection: "row", textAlign:'center', alignContent: "center",}}>
               <Text
@@ -165,7 +195,7 @@ export default () => {
               </TouchableX>
             </View>
           </View>
-          
+          <Toast />
         </Section>
       </LoadingActionContainer>
       <BottomPanel />

@@ -52,7 +52,6 @@ const A_Report = ({route, navigation}) => {
   useEffect(async () => {
     if(searchQuery != ''){
       await axios.post(`${BASE_URL}building/search`, {query: searchQuery}).then(res => { 
-        console.log(res.data);
         if(res.data.success)
           setServerData(res.data.data);
       }).catch(err => {

@@ -36,7 +36,6 @@ const Messages = ({route, navigation}) => {
         }
       }
     }).catch(err => {
-      console.log(err);
     });
     return () => { isMounted = false };
   }, []);
@@ -57,7 +56,7 @@ const Messages = ({route, navigation}) => {
       return (
         <View
           style={{justifyContent: 'center', alignItems: 'center', padding: 20}}>
-              <Text>There is no Move out datas</Text>
+              <Text>There are no messages</Text>
         </View>
       )
     }

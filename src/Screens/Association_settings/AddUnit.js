@@ -26,7 +26,6 @@ const AddUnit = ({route, navigation}) => {
   const [name, setName] = useState('');
 
   useEffect( async () => {
-    console.log(data);
     setUser(JSON.parse(await AsyncStorage.getItem('USER_INFO')));
   }, []);
 
@@ -43,7 +42,6 @@ const AddUnit = ({route, navigation}) => {
 
     await axios.post(`${BASE_URL}unit/add`, formData,
     { headers: { 'Content-Type': 'multipart/form-data', 'X-Requested-With': 'XMLHttpRequest', }}).then(res => { 
-      console.log(res.data);
       setName('');
       showSuccessToast('Your request is sent successfully. Please wait for the reply.');
     }).catch(err => {

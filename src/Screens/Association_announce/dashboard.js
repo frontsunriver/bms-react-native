@@ -30,7 +30,7 @@ const Dashboard = ({route, navigation}) => {
         }
       }
     }).catch(err => {
-      console.log(err);
+      
     });
   }, [isFocused]);
   

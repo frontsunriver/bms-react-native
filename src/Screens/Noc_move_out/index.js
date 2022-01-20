@@ -39,7 +39,6 @@ const NocMoveOut = ({routes, navigation}) => {
         }
       }
     }).catch(err => {
-      console.log(err);
     });
     // await axios.post(`${BASE_URL}/unit/getList`).then( res => {
     //   if(res.data.success) {
@@ -71,13 +70,11 @@ const NocMoveOut = ({routes, navigation}) => {
   };
 
   useEffect( () => {
-    console.log(dropdown);
     axios.post(`${BASE_URL}/unit/getList`, {building_id: dropdown}).then( res => {
       if(res.data.success) {
         setUnitData(res.data.data);
       }
     }).catch(err => {
-      console.log(err);
     });
   }, [dropdown])
 
@@ -110,12 +107,10 @@ const NocMoveOut = ({routes, navigation}) => {
 
     await axios.post(`${BASE_URL}move/outAdd`, formData,
     { headers: { 'Content-Type': 'multipart/form-data', 'X-Requested-With': 'XMLHttpRequest', }}).then(res => { 
-      console.log(res.data);
       showSuccessToast('Your request is sent successfully. Please wait for the reply.');
       NavigationService.navigate(Routes.NOC_MOVE_OUT_DASHBOARD_SCREEN);
     }).catch(err => {
       showErrorToast('Something went wrong! Please try again.');
-      console.warn(err);
     });
   }
 
@@ -177,8 +172,7 @@ const NocMoveOut = ({routes, navigation}) => {
                     placeholder="Select Building"
                     value={dropdown}
                     onChange={item => {
-                    setDropdown(item.id);
-                        console.log('selected', item);
+                      setDropdown(item.id);
                     }}
                     // renderLeftIcon={() => (
                     //     <Image style={styles.icon} source={require('./assets/account.png')} />
@@ -201,8 +195,7 @@ const NocMoveOut = ({routes, navigation}) => {
                     placeholder="Select Unit"
                     value={unitDropDown}
                     onChange={item => {
-                    setUnitDropDown(item.id);
-                        console.log('selected', item);
+                      setUnitDropDown(item.id);
                     }}
                     // renderLeftIcon={() => (
                     //     <Image style={styles.icon} source={require('./assets/account.png')} />
