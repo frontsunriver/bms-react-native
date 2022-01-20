@@ -5,6 +5,7 @@ import Routes from '../Routes';
 import MainStack from './MainStack';
 import AssociationStack from './AssociationStack';
 import DrawerScreen from '../../Screens/Drawer';
+import AssociationDrawerScreen from '../../Screens/Drawer/AssociationDrawer';
 import metrics from '../../Themes/Metrics';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -45,7 +46,7 @@ export default props => {
           drawerStyle={{
             width: metrics.drawerWidth,
           }}
-          drawerContent={DrawerScreen}>
+          drawerContent={AssociationDrawerScreen}>
           <Drawer.Screen name={Routes.ASSOCIATION_HOME_STACK} component={AssociationStack} />
         </Drawer.Navigator>
       )

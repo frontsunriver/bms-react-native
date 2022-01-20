@@ -18,16 +18,19 @@ const Detail = ({route, navigation}) => {
   const {data} = route.params;
   const [serverData, setServerData] = useState([]);
   useEffect( async () => {
+    let isMounted = true; 
     setUser(JSON.parse(await AsyncStorage.getItem('USER_INFO')));
     await axios.post(`${BASE_URL}/messages/getList`, {notify_id: data.id}).then( res => {
-        console.log(res.data);
+      if (isMounted) {
         if(res.data.success) {
-         console.log(res.data);
-          setServerData(res.data.data);
-        }
+          console.log(res.data);
+            setServerData(res.data.data);
+          }
+      }
     }).catch(err => {
         console.log(err);
     });
+    return () => { isMounted = false };
   }, [])
 
   const renderItem = () => {

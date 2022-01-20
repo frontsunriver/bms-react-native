@@ -40,21 +40,20 @@ const NocMoveIn = ({routes, navigation}) => {
   const [mobile, setMobile] = useState('');
 
   useEffect( async () => {
+    let isMounted = true;   
     await axios.post(`${BASE_URL}/building/getList`).then( res => {
-      if(res.data.success) {
-        setBuildingData(res.data.data);
+      if(isMounted) {
+        if(res.data.success) {
+          setBuildingData(res.data.data);
+        }
       }
     }).catch(err => {
       console.log(err);
     });
-    await axios.post(`${BASE_URL}/unit/getList`).then( res => {
-      if(res.data.success) {
-        setUnitData(res.data.data);
-      }
-    }).catch(err => {
-      console.log(err);
-    });
-    setUser(JSON.parse(await AsyncStorage.getItem('USER_INFO')));
+    if(isMounted) {
+      setUser(JSON.parse(await AsyncStorage.getItem('USER_INFO')));
+    }
+    return () => { isMounted = false };    
   }, []);
 
   const _renderItem = item => {
@@ -68,7 +67,7 @@ const NocMoveIn = ({routes, navigation}) => {
   const _renderItem1 = item => {
     return (
     <View>
-        <Text>{item.name}</Text>
+        <Text>{item.unit_name}</Text>
     </View>
     );
   };
@@ -85,6 +84,17 @@ const NocMoveIn = ({routes, navigation}) => {
     setDateString(date);
     hideDatePicker();
   };
+
+  useEffect( () => {
+    console.log(dropdown);
+    axios.post(`${BASE_URL}/unit/getList`, {building_id: dropdown}).then( res => {
+      if(res.data.success) {
+        setUnitData(res.data.data);
+      }
+    }).catch(err => {
+      console.log(err);
+    });
+  }, [dropdown])
 
   const selectFile = async () => {
     try {
@@ -224,7 +234,7 @@ const NocMoveIn = ({routes, navigation}) => {
     formData.append('tenants_emirates_id', emirate);
     formData.append('move_type', 1);
     formData.append('building_id', dropdown);
-    formData.append('apartment_id', unitDropDown);
+    formData.append('unit_id', unitDropDown);
     formData.append('move_date', convertDateFormat(dateString));
     formData.append('user_id', user.id);
 
@@ -376,8 +386,7 @@ const NocMoveIn = ({routes, navigation}) => {
                     placeholder="Select Building"
                     value={dropdown}
                     onChange={item => {
-                    setDropdown(item.id);
-                        console.log('selected', item);
+                      setDropdown(item.id);
                     }}
                     // renderLeftIcon={() => (
                     //     <Image style={styles.icon} source={require('./assets/account.png')} />
@@ -394,14 +403,13 @@ const NocMoveIn = ({routes, navigation}) => {
                     containerStyle={styles.shadow}
                     search
                     searchPlaceholder="Search Unit"
-                    labelField="name"
+                    labelField="unit_name"
                     valueField="id"
                     label="Unit"
                     placeholder="Select Unit"
                     value={unitDropDown}
                     onChange={item => {
-                    setUnitDropDown(item.id);
-                        console.log('selected', item);
+                      setUnitDropDown(item.id);
                     }}
                     // renderLeftIcon={() => (
                     //     <Image style={styles.icon} source={require('./assets/account.png')} />
@@ -520,7 +528,6 @@ const NocMoveIn = ({routes, navigation}) => {
               </View>
             </View>
             <Toast />
-            <FooterScreen />
           </ScrollView>
           
         </Container>

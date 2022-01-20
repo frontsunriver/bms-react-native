@@ -25,7 +25,11 @@ const Settings = ({routes, navigation}) => {
   const [ passport, setPassport ] = useState(null);
 
   useEffect( async () => {
-    setUser(JSON.parse(await AsyncStorage.getItem('USER_INFO')));
+    let isMounted = true;   
+    if(isMounted) {
+      setUser(JSON.parse(await AsyncStorage.getItem('USER_INFO')));
+    }
+    return () => { isMounted = false };
   }, [])
 
   const objCast = (obj) => {

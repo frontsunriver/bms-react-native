@@ -28,12 +28,12 @@ const Content = () => {
   const {t} = useTranslation();
   const homeIcon = parseIconFromClassName('fas fa-home');
   const keyIcon = parseIconFromClassName('fas fa-key');
-  const moveInIcon = parseIconFromClassName('fas fa-hand-point-right')
-  const moveOutIcon = parseIconFromClassName('fas fa-hand-point-left')
-  const maintenanceIcon = parseIconFromClassName('fas fa-truck-monster')
-  const reportIcon = parseIconFromClassName('fas fa-flag');
-  const messageIcon = parseIconFromClassName('fas fa-envelope');
+  const requestIcon = parseIconFromClassName('fas fa-folder')
+  const announceIcon = parseIconFromClassName('fas fa-bullhorn')
+  const sendOutIcon = parseIconFromClassName('fas fa-scroll')
   const settingIcon = parseIconFromClassName('fas fa-cogs');
+  const reportIcon = parseIconFromClassName('fas fa-flag');
+  const searchIcon = parseIconFromClassName('fas fa-search');
 
   useEffect( async () => {
     var userInfo = JSON.parse(await AsyncStorage.getItem('USER_INFO'));
@@ -64,7 +64,7 @@ const Content = () => {
       {renderName()}
       <View style={{marginTop: 20}}>
         <TouchableX border onPress={() => {
-          NavigationService.navigate(Routes.HOME_SCREEN)
+          NavigationService.navigate(Routes.ASSOCIATION_REQUEST_SCREEN)
         }}>
           <View style={{padding: 16, flexDirection: 'row'}}>
             <FontAwesome icon={homeIcon} style={{color: theme.colors.primary, fontSize: 20}} />
@@ -73,53 +73,53 @@ const Content = () => {
         </TouchableX>
 
         <TouchableX border onPress={() => {
-          NavigationService.navigate(Routes.NOC_MOVE_IN_SCREEN)
+          NavigationService.navigate(Routes.ASSOCIATION_REQUEST_SCREEN)
         }}>
           <View style={{padding: 16, flexDirection: 'row'}}>
-            <FontAwesome icon={moveInIcon} style={{color: theme.colors.primary, fontSize: 20}} />
-            <Text style={{color: theme.colors.primary, marginLeft: 10}}>{t('noc_move_in')}</Text>
+            <FontAwesome icon={requestIcon} style={{color: theme.colors.primary, fontSize: 20}} />
+            <Text style={{color: theme.colors.primary, marginLeft: 10}}>{t('view_request')}</Text>
           </View>
         </TouchableX>
 
         <TouchableX border onPress={() => {
-          NavigationService.navigate(Routes.NOC_MOVE_OUT_SCREEN)
+          NavigationService.navigate(Routes.ASSOCIATION_ANNOUNCE_SCREEN)
         }}>
           <View style={{padding: 16, flexDirection: 'row'}}>
-            <FontAwesome icon={moveOutIcon} style={{color: theme.colors.primary, fontSize: 20}} />
-            <Text style={{color: theme.colors.primary, marginLeft: 10}}>{t('noc_move_out')}</Text>
+            <FontAwesome icon={announceIcon} style={{color: theme.colors.primary, fontSize: 17}} />
+            <Text style={{color: theme.colors.primary, marginLeft: 10}}>ANNOUNCE OWNER</Text>
           </View>
         </TouchableX>
 
         <TouchableX border onPress={() => {
-          NavigationService.navigate(Routes.NOC_MAINTENANCE_SCREEN)
+          NavigationService.navigate(Routes.ASSOCIATION_SENDOUT_SCREEN)
         }}>
           <View style={{padding: 16, flexDirection: 'row'}}>
-            <FontAwesome icon={maintenanceIcon} style={{color: theme.colors.primary, fontSize: 15}} />
-            <Text style={{color: theme.colors.primary, marginLeft: 10}}>{t('noc_maintenance')}</Text>
+            <FontAwesome icon={sendOutIcon} style={{color: theme.colors.primary, fontSize: 15}} />
+            <Text style={{color: theme.colors.primary, marginLeft: 10}}>SEND OUT OWNER</Text>
           </View>
         </TouchableX>
         <TouchableX border onPress={() => {
-          NavigationService.navigate(Routes.REPORT_ISSUES_SCREEN)
-        }}>
-          <View style={{padding: 16, flexDirection: 'row'}}>
-            <FontAwesome icon={reportIcon} style={{color: theme.colors.primary, fontSize: 18}} />
-            <Text style={{color: theme.colors.primary, marginLeft: 10}}>{t('report_issue')}</Text>
-          </View>
-        </TouchableX>
-        <TouchableX border onPress={() => {
-          NavigationService.navigate(Routes.MESSAGES_SCREEN)
-        }}>
-          <View style={{padding: 16, flexDirection: 'row'}}>
-            <FontAwesome icon={messageIcon} style={{color: theme.colors.primary, fontSize: 18}} />
-            <Text style={{color: theme.colors.primary, marginLeft: 10}}>{t('btn_messages')}</Text>
-          </View>
-        </TouchableX>
-        <TouchableX border onPress={() => {
-          NavigationService.navigate(Routes.SETTINGS_SCREEN)
+          NavigationService.navigate(Routes.ASSOCIATION_SETTINGS_SCREEN)
         }}>
           <View style={{padding: 16, flexDirection: 'row'}}>
             <FontAwesome icon={settingIcon} style={{color: theme.colors.primary, fontSize: 15}} />
             <Text style={{color: theme.colors.primary, marginLeft: 10}}>{t('settings')}</Text>
+          </View>
+        </TouchableX>
+        <TouchableX border onPress={() => {
+          NavigationService.navigate(Routes.ASSOCIATION_REPORT_SCREEN)
+        }}>
+          <View style={{padding: 16, flexDirection: 'row'}}>
+            <FontAwesome icon={reportIcon} style={{color: theme.colors.primary, fontSize: 18}} />
+            <Text style={{color: theme.colors.primary, marginLeft: 10}}>REPORTS</Text>
+          </View>
+        </TouchableX>
+        <TouchableX border onPress={() => {
+          NavigationService.navigate(Routes.ASSOCIATION_SEARCH_SCREEN)
+        }}>
+          <View style={{padding: 16, flexDirection: 'row'}}>
+            <FontAwesome icon={searchIcon} style={{color: theme.colors.primary, fontSize: 15}} />
+            <Text style={{color: theme.colors.primary, marginLeft: 10}}>SEARCH</Text>
           </View>
         </TouchableX>
       </View>

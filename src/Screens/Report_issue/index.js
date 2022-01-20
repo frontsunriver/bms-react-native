@@ -25,8 +25,12 @@ const ReportIssues = ({routes, navigation}) => {
   const [summary, setSummary] = useState('');
 
   useEffect( async () => {
-    setUser(JSON.parse(await AsyncStorage.getItem('USER_INFO')));
-    requestCameraPermission();
+    let isMounted = true;   
+    if(isMounted) {
+      setUser(JSON.parse(await AsyncStorage.getItem('USER_INFO')));
+      requestCameraPermission();
+    }
+    return () => { isMounted = false };
   }, [])
 
   useEffect(() => {

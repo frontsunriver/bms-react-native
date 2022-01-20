@@ -32,21 +32,25 @@ const NocMoveIn = ({routes, navigation}) => {
   const [singleFile, setSingleFile] = useState(null);
 
   useEffect( async () => {
-    await axios.post(`${BASE_URL}/building/getList`).then( res => {
-      if(res.data.success) {
-        setBuildingData(res.data.data);
-      }
-    }).catch(err => {
-      console.log(err);
-    });
-    await axios.post(`${BASE_URL}/unit/getList`).then( res => {
-      if(res.data.success) {
-        setUnitData(res.data.data);
-      }
-    }).catch(err => {
-      console.log(err);
-    });
+    let isMounted = true;    
     setUser(JSON.parse(await AsyncStorage.getItem('USER_INFO')));
+    await axios.post(`${BASE_URL}/building/getList`).then( res => {
+      if(isMounted) {
+        if(res.data.success) {
+          setBuildingData(res.data.data);
+        }
+      }
+    }).catch(err => {
+      console.log(err);
+    });
+    // await axios.post(`${BASE_URL}/unit/getList`).then( res => {
+    //   if(res.data.success) {
+    //     setUnitData(res.data.data);
+    //   }
+    // }).catch(err => {
+    //   console.log(err);
+    // });
+    return () => { isMounted = false };
   }, []);
 
   const _renderItem = item => {
@@ -60,7 +64,7 @@ const NocMoveIn = ({routes, navigation}) => {
   const _renderItem1 = item => {
     return (
     <View>
-        <Text>{item.name}</Text>
+        <Text>{item.unit_name}</Text>
     </View>
     );
   };
@@ -77,6 +81,17 @@ const NocMoveIn = ({routes, navigation}) => {
     setDateString(date);
     hideDatePicker();
   };
+
+  useEffect( () => {
+    console.log(dropdown);
+    axios.post(`${BASE_URL}/unit/getList`, {building_id: dropdown}).then( res => {
+      if(res.data.success) {
+        setUnitData(res.data.data);
+      }
+    }).catch(err => {
+      console.log(err);
+    });
+  }, [dropdown])
 
   const selectFile = async () => {
     try {
@@ -216,7 +231,7 @@ const NocMoveIn = ({routes, navigation}) => {
                     containerStyle={styles.shadow}
                     search
                     searchPlaceholder="Search Unit"
-                    labelField="name"
+                    labelField="unit_name"
                     valueField="id"
                     label="Unit"
                     placeholder="Select Unit"
@@ -281,7 +296,6 @@ const NocMoveIn = ({routes, navigation}) => {
             </View>
             <Toast />
           </ScrollView>
-          <FooterScreen />
         </Container>
       </LoadingActionContainer>
   );

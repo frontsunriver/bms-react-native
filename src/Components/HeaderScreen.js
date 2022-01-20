@@ -19,7 +19,8 @@ const HeaderScreen = (props) => {
     const leftIcon = parseIconFromClassName('fas fa-chevron-left')
     
     useEffect(() => {
-        console.log(props);
+      let isMounted = true;    
+      if (isMounted) {
         if(title2) {
             setHeight(170);
             setDouble(true);
@@ -32,6 +33,8 @@ const HeaderScreen = (props) => {
         }else {
           setIconType('back');
         }
+      }
+      return () => { isMounted = false };
     }, []);
 
     useEffect(() => {
@@ -141,7 +144,7 @@ const HeaderScreen = (props) => {
                 }}
               >
                 {showIconRender()}
-                <TouchableOpacity>
+                {/* <TouchableOpacity>
                   <Image
                     source={require('../../hero/ellipse.png')}
                     style={{
@@ -151,7 +154,7 @@ const HeaderScreen = (props) => {
                       height: 20
                     }}
                   />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               </View>
               <View style={{
                 display: 'flex',

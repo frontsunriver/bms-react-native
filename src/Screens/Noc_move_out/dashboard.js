@@ -20,19 +20,25 @@ const Dashboard = ({routes, navigation}) => {
   const [serverData, setServerData] = useState([]);
   const [viewMode, setViewMode] = useState(false);
   useEffect( async () => {
-    console.log("**************************");
-    var userInfo = JSON.parse(await AsyncStorage.getItem('USER_INFO'));
-    setUser(userInfo);
+    let isMounted = true;     
+    if(isMounted) {
+      var userInfo = JSON.parse(await AsyncStorage.getItem('USER_INFO'));
+      setUser(userInfo);
+    }
+    
     await axios.post(`${BASE_URL}/move/getList`, {move_type: 2, user_id: userInfo.id}).then( res => {
-      if(res.data.success) {
-        setServerData(res.data.data);
-        if(res.data.data.length > 0) {
-          setViewMode(true);
+      if(isMounted) {
+        if(res.data.success) {
+          setServerData(res.data.data);
+          if(res.data.data.length > 0) {
+            setViewMode(true);
+          }
         }
       }
     }).catch(err => {
       console.log(err);
     });
+    return () => { isMounted = false };
   }, []);
   
   const renderView = () => {

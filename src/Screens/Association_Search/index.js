@@ -14,10 +14,8 @@ import {showInfoToast, showErrorToast, showSuccessToast} from '../../Lib/Toast';
 import { Searchbar } from 'react-native-paper';
 import Toast from 'react-native-tiny-toast';
 import NavigationService from '../../Navigation';
-import Routes from '../../Navigation/Routes';
 
-
-const A_Report = ({route, navigation}) => {
+const A_Search = ({route, navigation}) => {
   const {t} = useTranslation();
   const {theme} = useAppTheme();
   const [serverData, setServerData] = useState([]);
@@ -25,13 +23,12 @@ const A_Report = ({route, navigation}) => {
 
   const renderScreen = () => {
     if(serverData.length > 0) {
+      var index = 0;
       return serverData.map(data => {
         return (
-          <View key={data.id} style={{flexDirection: 'column', marginTop: 10, alignItems:'center', alignContent:'space-between'}}>
-            <View style={{flexDirection: 'row', justifyContent: 'center', alignContent:'space-around', alignItems:'center'}}>
-              <View style={{flex: 1}}><Text>{data.name}</Text></View>
-              <View style={{flex: 1, alignItems:'flex-end'}}><Text>{data.address}</Text></View>
-            </View>
+          <View key={index++} style={{backgroundColor: theme.colors.background, flexDirection: 'column', marginTop: 10, alignItems:'flex-start', alignContent:'space-between', marginTop: 5, padding: 10, borderRadius: 5}}>
+              <UserInfo data={data.user_info}/>
+              <BuildingInfo data={data.building_info}/>
           </View>
         )
       })
@@ -51,12 +48,17 @@ const A_Report = ({route, navigation}) => {
 
   useEffect(async () => {
     if(searchQuery != ''){
-      await axios.post(`${BASE_URL}building/search`, {query: searchQuery}).then(res => { 
-        console.log(res.data);
-        if(res.data.success)
-          setServerData(res.data.data);
+      await axios.post(`${BASE_URL}user/search`, {query: searchQuery}).then(res => { 
+        console.log(res.data.data);
+        if(res.data.success) {
+          if(res.data.data.length > 0){
+            setServerData(res.data.data);
+          }else {
+            setServerData([]);
+          }
+        }
       }).catch(err => {
-        showErrorToast('Something went wrong! Please try again.');
+        console.log(err);
       });  
     }else {
       setServerData([]);
@@ -92,6 +94,40 @@ const A_Report = ({route, navigation}) => {
       </LoadingActionContainer>
   );
 };
+
+const UserInfo = (props) => {
+  const {data} = props;
+  return (
+    <View style={{flexDirection:'column', paddingLeft: 10}}>
+      <View><Text style={{fontSize: 18, borderBottomColor: '#e2e2e2', borderBottomWidth: 1, color: '#fff', paddingBottom: 5}}>{data.first_name} {data.last_name}</Text></View>
+    </View>
+  )
+}
+
+const BuildingInfo = (props) => {
+  const {data} = props;
+  const renderContent = () => {
+    if(data.length > 0) {
+      return data.map(item => {
+        return (
+          <View key={item.id + item.unit_name + item.name} style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', alignContent:'space-between', width: '100%'}}>
+            <Text style={{ color: '#fff'}}>{item.name}</Text>
+            <Text style={{ color: '#fff'}}>{item.unit_name}</Text>
+          </View>
+        )
+      })
+    }else {
+      return (
+        <View><Text style={{ color: '#fff'}}>There is no unit and building</Text></View>
+      )
+    }
+  }
+  return (
+    <View style={{flexDirection:'column', justifyContent: 'space-between', padding: 10}}>
+      {renderContent()}
+    </View>
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -162,4 +198,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default A_Report;
+export default A_Search;

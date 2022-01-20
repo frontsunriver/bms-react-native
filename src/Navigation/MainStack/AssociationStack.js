@@ -23,8 +23,7 @@ import AddUnit from '../../Screens/Association_settings/AddUnit';
 import OwnerDetail from '../../Screens/Association_settings/OwnerDetail';
 import ManageOwners from '../../Screens/Association_settings/ManageOwners';
 import Report from '../../Screens/Association_Report';
-import Messages from '../../Screens/Messages';
-import Settings from '../../Screens/Settings';
+import Search from '../../Screens/Association_Search';
 import AsyncStorage from '@react-native-community/async-storage';
 
 const Stack = createStackNavigator();
@@ -130,20 +129,9 @@ export default props => {
       />
 
       <Stack.Screen
-        options={{
-          header: () => ( <HeaderScreen association="true" type="back" title1={t('btn_messages')}/> ) }}
-        name={Routes.MESSAGES_SCREEN}
-        component={Messages}
-      />
-
-      <Stack.Screen
-        options={{
-          header: () => (
-          <HeaderScreen  association="true" type="back" title1={t('settings')}/>
-        ),
-        }}
-        name={Routes.SETTINGS_SCREEN}
-        component={Settings}
+        options={{ header: () => ( <HeaderScreen  association="true" type="back" title1="SEARCH"/> )}}
+        name={Routes.ASSOCIATION_SEARCH_SCREEN}
+        component={Search}
       />
 
     </Stack.Navigator>

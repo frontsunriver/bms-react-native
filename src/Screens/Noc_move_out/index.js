@@ -31,21 +31,27 @@ const NocMoveOut = ({routes, navigation}) => {
   const [unitData, setUnitData] = useState([]);
   
   useEffect( async () => {
+    let isMounted = true;     
     await axios.post(`${BASE_URL}/building/getList`).then( res => {
-      if(res.data.success) {
-        setBuildingData(res.data.data);
+      if(isMounted) {
+        if(res.data.success) {
+          setBuildingData(res.data.data);
+        }
       }
     }).catch(err => {
       console.log(err);
     });
-    await axios.post(`${BASE_URL}/unit/getList`).then( res => {
-      if(res.data.success) {
-        setUnitData(res.data.data);
-      }
-    }).catch(err => {
-      console.log(err);
-    });
-    setUser(JSON.parse(await AsyncStorage.getItem('USER_INFO')));
+    // await axios.post(`${BASE_URL}/unit/getList`).then( res => {
+    //   if(res.data.success) {
+    //     setUnitData(res.data.data);
+    //   }
+    // }).catch(err => {
+    //   console.log(err);
+    // });
+    if(isMounted) {
+      setUser(JSON.parse(await AsyncStorage.getItem('USER_INFO')));
+    }
+    return () => { isMounted = false };
   }, []);
   
   const _renderItem = item => {
@@ -59,10 +65,21 @@ const NocMoveOut = ({routes, navigation}) => {
   const _renderItem1 = item => {
     return (
     <View>
-        <Text>{item.name}</Text>
+        <Text>{item.unit_name}</Text>
     </View>
     );
   };
+
+  useEffect( () => {
+    console.log(dropdown);
+    axios.post(`${BASE_URL}/unit/getList`, {building_id: dropdown}).then( res => {
+      if(res.data.success) {
+        setUnitData(res.data.data);
+      }
+    }).catch(err => {
+      console.log(err);
+    });
+  }, [dropdown])
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -87,7 +104,7 @@ const NocMoveOut = ({routes, navigation}) => {
     var formData = new FormData();
     formData.append('move_type', 2);
     formData.append('building_id', dropdown);
-    formData.append('apartment_id', unitDropDown);
+    formData.append('unit_id', unitDropDown);
     formData.append('move_date', convertDateFormat(dateString));
     formData.append('user_id', user.id);
 
@@ -178,7 +195,7 @@ const NocMoveOut = ({routes, navigation}) => {
                     containerStyle={styles.shadow}
                     search
                     searchPlaceholder="Search Unit"
-                    labelField="name"
+                    labelField="unit_name"
                     valueField="id"
                     label="Unit"
                     placeholder="Select Unit"
@@ -230,7 +247,6 @@ const NocMoveOut = ({routes, navigation}) => {
             </View>
             <Toast />
           </ScrollView>
-          <FooterScreen />
         </Container>
       </LoadingActionContainer>
   );
