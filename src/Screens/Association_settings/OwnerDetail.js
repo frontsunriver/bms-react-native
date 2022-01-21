@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import { View, Text, StyleSheet, TextInput, Alert, Keyboard } from 'react-native';
-import {Dropdown, MultiSelect} from 'react-native-element-dropdown';
 import { Button } from 'react-native-paper';
 import LoadingActionContainer from '../../Components/LoadingActionContainer';
 import useAppTheme from '../../Themes/Context';
@@ -13,8 +12,6 @@ import { BASE_URL } from '../../Config';
 import AsyncStorage from '@react-native-community/async-storage';
 import {showInfoToast, showErrorToast, showSuccessToast} from '../../Lib/Toast';
 import Toast from 'react-native-tiny-toast';
-import NavigationService from '../../Navigation';
-import Routes from '../../Navigation/Routes';
 import { useNavigation } from '@react-navigation/native';
 
 const OwnerDetail = ({route, navigation}) => {
@@ -31,6 +28,7 @@ const OwnerDetail = ({route, navigation}) => {
   const navigate = useNavigation();
 
   useEffect( async () => {
+    let isMounted = true;   
     if(data) {
       setFirstName(data.first_name)
       setLastName(data.last_name)
@@ -39,8 +37,21 @@ const OwnerDetail = ({route, navigation}) => {
       setEmail(data.email)
     }
     setUser(JSON.parse(await AsyncStorage.getItem('USER_INFO')));
+    await axios.post(`${BASE_URL}/building/getList`).then( res => {
+      if(isMounted) {
+        if(res.data.success) {
+          setBuildingData(res.data.data);
+        }
+      }
+    }).catch(err => {
+    });
+    if(isMounted) {
+      setUser(JSON.parse(await AsyncStorage.getItem('USER_INFO')));
+    }
+    return () => { isMounted = false };    
   }, []);
 
+  
   const showPasswordPanel = () => {
     if(data) {
       return (
@@ -193,7 +204,7 @@ const OwnerDetail = ({route, navigation}) => {
                 <View style={{flexDirection: 'row', justifyContent: 'flex-end', marginTop: 15}}>
                   <Button
                     mode="contained"
-                    style={{borderRadius: 5, padding: 5}}
+                    style={{borderRadius: 5}}
                     color={theme.colors.background}
                     onPress={submitHandle}
                   >

@@ -11,7 +11,6 @@ import DocumentPicker from 'react-native-document-picker';
 import { showErrorToast, showInfoToast, showSuccessToast } from '../../Lib/Toast';
 import Toast from 'react-native-tiny-toast';
 import axios from 'axios';
-import AsyncStorage from '@react-native-community/async-storage';
 import { BASE_URL } from '../../Config';
 import Routes from '../../Navigation/Routes';
 
@@ -35,8 +34,7 @@ const Settings = ({routes, navigation}) => {
       });
       setSingleFile(res[0]);
       var formData = new FormData();
-      const fileToUpload = singleFile;
-      formData.append('importexcel', fileToUpload);
+      formData.append('importexcel', res[0]);
 
       await axios.post(`${BASE_URL}import/excel`, formData,
       { headers: { 'Content-Type': 'multipart/form-data', 'X-Requested-With': 'XMLHttpRequest', }}).then(res => { 

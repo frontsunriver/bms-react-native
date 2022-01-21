@@ -7,11 +7,13 @@ import {Container} from '../../Components';
 import theme from '../../Themes/configs/default';
 import { Button } from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
+import DocumentPicker from 'react-native-document-picker';
 import axios from 'axios';
 import { BASE_URL } from '../../Config';
 import { useIsFocused } from '@react-navigation/native';
 import Routes from '../../Navigation/Routes';
 import { useNavigation } from '@react-navigation/native';
+import { showErrorToast, showSuccessToast } from '../../Lib/Toast';
 
 const ManageOwners = ({route, navigation}) => {
   const {theme} = useAppTheme();
@@ -20,6 +22,8 @@ const ManageOwners = ({route, navigation}) => {
   const [serverData, setServerData] = useState([]);
   const [viewMode, setViewMode] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
+  const [singleFile, setSingleFile] = useState(null);
+  const [loading, setLoading] = useState(false);
   const isFocused = useIsFocused();
   const navigate = useNavigation();
   useEffect( async () => {
@@ -36,6 +40,56 @@ const ManageOwners = ({route, navigation}) => {
     }).catch(err => {
     });
   }, [isFocused]);
+
+  const importHandle = async () => {
+    setLoading(true);
+    try {
+      const res = await DocumentPicker.pick({
+        type: [DocumentPicker.types.allFiles],
+      });
+      setSingleFile(res[0]);
+      var formData = new FormData();
+      const fileToUpload = res[0];
+      formData.append('importexcel', fileToUpload);
+      formData.append('building_id', data.id);
+      await axios.post(`${BASE_URL}import/unit_excel`, formData,
+      { headers: { 'Content-Type': 'multipart/form-data', 'X-Requested-With': 'XMLHttpRequest', }}).then(res => { 
+        console.log(res.data);
+        if(res.data.success) {
+          setLoading(false);
+          showSuccessToast('Database is imported successfully.');
+          axios.post(`${BASE_URL}/unit/getList`, {building_id: data.id}).then( resp => {
+            if(resp.data.success) {
+              setServerData(resp.data.data);
+              setTotalCount(resp.data.data.length);
+              if(resp.data.data.length > 0) {
+                setViewMode(true);
+              }
+            }
+          }).catch(err => {
+            showErrorToast(err);
+          });
+          setSingleFile(null);
+        }else {
+          setLoading(false);
+          showErrorToast(res.data.message);
+        }
+      }).catch(err => {
+        console.log(err);
+        setLoading(false);
+        showErrorToast('Something went wrong! Please try again.');
+      });
+    } catch (err) {
+      console.log('reject')
+      setLoading(false);
+      setSingleFile(null);
+      if (DocumentPicker.isCancel(err)) {
+        
+      } else {
+        
+      }
+    }
+  }
 
   const submitHandle = () => {
     navigate.navigate(Routes.ASSOCIATION_ADD_UNITS, {data: data});
@@ -83,21 +137,39 @@ const ManageOwners = ({route, navigation}) => {
               <View style={{flexDirection: 'column', padding: 20, }}>
                   <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingBottom: 5, borderBottomColor: '#e2e2e2', borderBottomWidth: 1}}>
                     <Text style={{top: 10}}>Total {totalCount}</Text>
-                    <Button
-                      mode="contained"
-                      style={{borderRadius: 5, padding: 5}}
-                      color={theme.colors.background}
-                      onPress={submitHandle}
-                    >
-                      <Text
-                        style={{
-                          fontSize: 15,
-                          textAlign: 'center',
-                          color: theme.colors.primary
-                        }}>
-                        ADD
-                      </Text>
-                    </Button>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                      <Button
+                        loading={loading}
+                        mode="contained"
+                        style={{borderRadius: 5}}
+                        color={loading ? theme.colors.accent : theme.colors.background}
+                        onPress={importHandle}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 13,
+                            textAlign: 'center',
+                            color: theme.colors.primary
+                          }}>
+                          Import Excel
+                        </Text>
+                      </Button>
+                      <Button
+                        mode="contained"
+                        style={{borderRadius: 5, marginLeft: 5}}
+                        color={theme.colors.background}
+                        onPress={submitHandle}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 13,
+                            textAlign: 'center',
+                            color: theme.colors.primary
+                          }}>
+                          ADD
+                        </Text>
+                      </Button>
+                    </View>
                   </View>
               </View>
               {renderView()}

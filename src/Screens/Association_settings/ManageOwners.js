@@ -86,7 +86,7 @@ const ManageOwners = ({route, navigation}) => {
                   <View style={{flexDirection: 'row', justifyContent: 'flex-end', paddingBottom: 5, borderBottomColor: '#e2e2e2', borderBottomWidth: 1}}>
                     <Button
                       mode="contained"
-                      style={{borderRadius: 5, padding: 5}}
+                      style={{borderRadius: 5,}}
                       color={theme.colors.background}
                       onPress={submitHandle}
                     >
