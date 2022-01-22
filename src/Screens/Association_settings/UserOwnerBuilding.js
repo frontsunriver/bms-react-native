@@ -11,15 +11,30 @@ import { BASE_URL } from '../../Config';
 import AsyncStorage from '@react-native-community/async-storage';
 import AssociationFooterScreen from '../../Components/AssociationFooterScreen';
 import {showInfoToast, showErrorToast, showSuccessToast} from '../../Lib/Toast';
-import { Searchbar } from 'react-native-paper';
+import Routes from '../../Navigation/Routes';
 import Toast from 'react-native-tiny-toast';
-import NavigationService from '../../Navigation';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 
-const A_Search = ({route, navigation}) => {
+const UserOwnerBuilding = ({route, navigation}) => {
   const {t} = useTranslation();
   const {theme} = useAppTheme();
   const [serverData, setServerData] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
+  const { data } = route.params;
+  const isFocused = useIsFocused();
+  const navigate = useNavigation();
+
+  useEffect(async () => {
+    await axios.post(`${BASE_URL}user/search`, {id: data.id}).then(res => { 
+    if(res.data.success) {
+        if(res.data.data.length > 0){
+        setServerData(res.data.data);
+        }else {
+        setServerData([]);
+        }
+    }
+    }).catch(err => {
+    });  
+  }, [isFocused])
 
   const renderScreen = () => {
     if(serverData.length > 0) {
@@ -36,33 +51,15 @@ const A_Search = ({route, navigation}) => {
     }else {
       return(
         <View style={{flexDirection: 'column', marginTop: 10, justifyContent: 'center', alignItems:'center'}}>
-          <Text>There is no matched data</Text>
+          <Text>This user have no any buildings and units</Text>
         </View>
       )
     }
   }
 
-  const onChangeSearch = async (t) => {
-    setSearchQuery(t);
+  const submitHandle = () => {
+    navigate.navigate(Routes.ASSOCIATION_ADD_BUILDINGS_UNITS, {data: data})
   }
-
-  useEffect(async () => {
-    if(searchQuery != ''){
-      await axios.post(`${BASE_URL}user/search`, {query: searchQuery}).then(res => { 
-        if(res.data.success) {
-          if(res.data.data.length > 0){
-            setServerData(res.data.data);
-          }else {
-            setServerData([]);
-          }
-        }
-      }).catch(err => {
-      });  
-    }else {
-      setServerData([]);
-    }
-    
-  }, [searchQuery])
 
   return (
       <LoadingActionContainer fixed>
@@ -71,15 +68,26 @@ const A_Search = ({route, navigation}) => {
             backgroundColor: theme.colors.primary,
             flex: 1,
           }}>
-          <Searchbar
-            placeholder="Search the building name"
-            onChangeText={onChangeSearch}
-            inputStyle={theme.colors.background}
-            style={{backgroundColor: '#e2e2e2', marginRight: 20, marginLeft: 20, marginTop: 10}}
-            iconColor='#000'
-            value={searchQuery}
-          />
           <ScrollView>
+          <View style={{flexDirection: 'column', padding: 20, }}>
+            <View style={{flexDirection: 'row', justifyContent: 'flex-end', paddingBottom: 5, borderBottomColor: '#e2e2e2', borderBottomWidth: 1}}>
+                <Button
+                    mode="contained"
+                    style={{borderRadius: 5,}}
+                    color={theme.colors.background}
+                    onPress={submitHandle}
+                >
+                    <Text
+                    style={{
+                        fontSize: 15,
+                        textAlign: 'center',
+                        color: theme.colors.primary
+                    }}>
+                    ADD
+                    </Text>
+                </Button>
+                </View>
+            </View>
             <View style={{paddingBottom: 100}}>
               <View style={{flexDirection: 'column', justifyContent: 'center', padding: 20}}>
                 {renderScreen()}
@@ -108,7 +116,7 @@ const BuildingInfo = (props) => {
     if(data.length > 0) {
       return data.map(item => {
         return (
-          <View key={item.id + item.unit_name + item.building_name} style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', alignContent:'space-between', width: '100%'}}>
+          <View key={item.id + item.unit_name + item.name} style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', alignContent:'space-between', width: '100%'}}>
             <Text style={{ color: '#fff'}}>{item.building_name}</Text>
             <Text style={{ color: '#fff'}}>{item.unit_name}</Text>
           </View>
@@ -196,4 +204,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default A_Search;
+export default UserOwnerBuilding;

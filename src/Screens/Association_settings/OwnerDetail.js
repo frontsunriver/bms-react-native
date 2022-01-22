@@ -36,15 +36,6 @@ const OwnerDetail = ({route, navigation}) => {
       setAddress(data.address)
       setEmail(data.email)
     }
-    setUser(JSON.parse(await AsyncStorage.getItem('USER_INFO')));
-    await axios.post(`${BASE_URL}/building/getList`).then( res => {
-      if(isMounted) {
-        if(res.data.success) {
-          setBuildingData(res.data.data);
-        }
-      }
-    }).catch(err => {
-    });
     if(isMounted) {
       setUser(JSON.parse(await AsyncStorage.getItem('USER_INFO')));
     }

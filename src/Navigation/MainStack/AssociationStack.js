@@ -21,6 +21,8 @@ import GetAllUnits from '../../Screens/Association_settings/GetAllUnits';
 import AddBuilding from '../../Screens/Association_settings/AddBuilding';
 import AddUnit from '../../Screens/Association_settings/AddUnit';
 import OwnerDetail from '../../Screens/Association_settings/OwnerDetail';
+import OnwerBuildingUnit from '../../Screens/Association_settings/UserOwnerBuilding';
+import AddBuildingAndUnit from '../../Screens/Association_settings/AddUnitAndBuilding';
 import ManageOwners from '../../Screens/Association_settings/ManageOwners';
 import Report from '../../Screens/Association_Report';
 import Search from '../../Screens/Association_Search';
@@ -120,6 +122,18 @@ export default props => {
         options={{ header: () => ( <HeaderScreen association="true" type="back" title1="OWNER DETAIL"/> )}}
         name={Routes.ASSOCIATION_OWNER_DETAIL}
         component={OwnerDetail}
+      />
+
+      <Stack.Screen
+        options={{ header: () => ( <HeaderScreen association="true" type="back" title1="BUILDINGS AND UNITS"/> )}}
+        name={Routes.ASSOCIATION_OWNER_BUILDINGS_UNITS}
+        component={OnwerBuildingUnit}
+      />
+
+      <Stack.Screen
+        options={{ header: () => ( <HeaderScreen association="true" type="back" title1="ADD BUILDINGS AND UNITS"/> )}}
+        name={Routes.ASSOCIATION_ADD_BUILDINGS_UNITS}
+        component={AddBuildingAndUnit}
       />
 
       <Stack.Screen

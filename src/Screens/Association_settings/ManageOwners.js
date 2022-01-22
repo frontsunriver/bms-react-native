@@ -48,7 +48,7 @@ const ManageOwners = ({route, navigation}) => {
               <View style={[styles.card, styles.shadowProp]}>
                 {serverData.map(data => {
                   return (
-                    <TouchableOpacity key={data.id} onPress={() => {navigate.navigate(Routes.ASSOCIATION_OWNER_DETAIL, {data: data})}}>
+                    <TouchableOpacity key={data.id} onPress={() => {navigate.navigate(Routes.ASSOCIATION_OWNER_BUILDINGS_UNITS, {data: data})}}>
                     <View
                     style={{borderRadius: 3, backgroundColor: '#ddd', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 20, borderBottomColor: '#e2e2e2', borderBottomWidth: 0.8, marginTop: 5}}>
                         <View style={{flexDirection: 'column', justifyContent: "space-between", alignItems: 'flex-start', alignContent: 'center'}}>
