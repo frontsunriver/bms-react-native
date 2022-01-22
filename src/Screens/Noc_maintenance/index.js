@@ -135,10 +135,11 @@ const NocMoveIn = ({routes, navigation}) => {
     formData.append('trade_licence', fileToUpload);
     formData.append('building_id', dropdown);
     formData.append('unit_id', unitDropDown);
-    formData.append('carried_date', convertDateFormat(dateString));
+    formData.append('move_date', convertDateFormat(dateString));
     formData.append('user_id', user.id);
+    formData.append('move_type', 3);
 
-    await axios.post(`${BASE_URL}maintenances/add`, formData,
+    await axios.post(`${BASE_URL}move/maintenanceAdd`, formData,
     { headers: { 'Content-Type': 'multipart/form-data', 'X-Requested-With': 'XMLHttpRequest', }}).then(res => { 
       showSuccessToast('Your request is sent successfully. Please wait for the reply.');
       NavigationService.navigate(Routes.NOC_MAINTENANCE_DASHBOARD_SCREEN);

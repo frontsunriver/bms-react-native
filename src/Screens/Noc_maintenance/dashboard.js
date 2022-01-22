@@ -13,19 +13,21 @@ import DashboardItem from '../../Components/DashboardItem';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
 import { BASE_URL } from '../../Config';
+import { useIsFocused } from '@react-navigation/native';
 
 const Dashboard = ({routes, navigation}) => {
   const {theme} = useAppTheme();
   const [user, setUser] = useState({});
   const [serverData, setServerData] = useState([]);
   const [viewMode, setViewMode] = useState(false);
+  const isFocused = useIsFocused();
   useEffect( async () => {
     let isMounted = true;     
     var userInfo = JSON.parse(await AsyncStorage.getItem('USER_INFO'));
     if(isMounted) {
       setUser(userInfo);
     }
-    await axios.post(`${BASE_URL}/maintenances/getList`, {user_id: userInfo.id}).then( res => {
+    await axios.post(`${BASE_URL}/move/getList`, {move_type: 3, user_id: userInfo.id}).then( res => {
       if(isMounted) {
         if(res.data.success) {
           setServerData(res.data.data);
@@ -37,7 +39,7 @@ const Dashboard = ({routes, navigation}) => {
     }).catch(err => {
     });
     return () => { isMounted = false };
-  }, []);
+  }, [isFocused]);
   
   const renderView = () => {
     if(viewMode) {

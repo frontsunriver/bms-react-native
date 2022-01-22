@@ -13,11 +13,13 @@ import DashboardItem from '../../Components/DashboardItem';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
 import { BASE_URL } from '../../Config';
+import { useIsFocused } from '@react-navigation/native';
 
 const Dashboard = ({routes, navigation}) => {
   const {theme} = useAppTheme();
   const [user, setUser] = useState({});
   const [serverData, setServerData] = useState([]);
+  const isFocused = useIsFocused();
   const [viewMode, setViewMode] = useState(false);
   useEffect( async () => {
     let isMounted = true;   
@@ -37,7 +39,7 @@ const Dashboard = ({routes, navigation}) => {
     }).catch(err => {
     });
     return () => { isMounted = false };
-  }, []);
+  }, [isFocused]);
   
   const renderView = () => {
     if(viewMode) {

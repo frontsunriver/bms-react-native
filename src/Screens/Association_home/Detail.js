@@ -51,7 +51,7 @@ const Detail = ({route, navigation}) => {
                     <Text style={{flex: 2}}>Request User: </Text>
                     <View style={{flexDirection: 'row', flex: 3}}>
                         <Text>{data.first_name} </Text>
-                        <Text>{data.first_name}</Text>
+                        <Text>{data.last_name}</Text>
                     </View>
                 </View>
                 <View style={{flexDirection: 'row', paddingTop: 5}}>
@@ -95,6 +95,16 @@ const Detail = ({route, navigation}) => {
         )
     }
   }
+
+  const renderTitle = () => {
+    if (data.move_type == 1) { 
+        return 'Move In' 
+    } else if(data.move_type == 2) {
+        return 'Move out'
+    } else {
+        return 'Maintenance Carried out'
+    }
+  }
   return (
       <LoadingActionContainer fixed>
         <Container
@@ -107,7 +117,7 @@ const Detail = ({route, navigation}) => {
                 <View style={{flexDirection: 'column', justifyContent: 'center', padding: 20}}>
                     <View style={{flexDirection: 'row', borderBottomColor: theme.colors.backgroundColor, borderBottomWidth: 0.8, paddingBottom: 5, justifyContent: 'space-between', alignItems: 'flex-start'}}>
                         <View style={{flexDirection: 'row'}}>
-                            <Text>{data.move_type == 1 ? 'Move In' : 'Move out'}</Text>
+                            <Text>{ renderTitle() }</Text>
                         </View>
                         <View>
                             <Text>{data.move_date}</Text>
