@@ -41,19 +41,23 @@ const NocMoveIn = ({routes, navigation}) => {
 
   useEffect( async () => {
     let isMounted = true;   
-    await axios.post(`${BASE_URL}/building/getList`).then( res => {
-      if(isMounted) {
-        if(res.data.success) {
-          setBuildingData(res.data.data);
-        }
-      }
-    }).catch(err => {
-    });
+    // await axios.post(`${BASE_URL}/building/getList`).then( res => {
+    //   if(isMounted) {
+    //     if(res.data.success) {
+    //       setBuildingData(res.data.data);
+    //     }
+    //   }
+    // }).catch(err => {
+    // });
     if(isMounted) {
       setUser(JSON.parse(await AsyncStorage.getItem('USER_INFO')));
     }
     return () => { isMounted = false };    
   }, []);
+
+  useEffect(() => {
+    return setBuildingData(user.building_list);
+  }, [user])
 
   const _renderItem = item => {
     return (
@@ -234,6 +238,7 @@ const NocMoveIn = ({routes, navigation}) => {
       showSuccessToast('Your request is sent successfully. Please wait for the reply.');
       NavigationService.navigate(Routes.NOC_MOVE_IN_DASHBOARD_SCREEN);
     }).catch(err => {
+      console.log(err);
       showErrorToast('Something went wrong! Please try again.');
     });
   }

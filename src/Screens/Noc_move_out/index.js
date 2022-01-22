@@ -32,14 +32,14 @@ const NocMoveOut = ({routes, navigation}) => {
   
   useEffect( async () => {
     let isMounted = true;     
-    await axios.post(`${BASE_URL}/building/getList`).then( res => {
-      if(isMounted) {
-        if(res.data.success) {
-          setBuildingData(res.data.data);
-        }
-      }
-    }).catch(err => {
-    });
+    // await axios.post(`${BASE_URL}/building/getList`).then( res => {
+    //   if(isMounted) {
+    //     if(res.data.success) {
+    //       setBuildingData(res.data.data);
+    //     }
+    //   }
+    // }).catch(err => {
+    // });
     // await axios.post(`${BASE_URL}/unit/getList`).then( res => {
     //   if(res.data.success) {
     //     setUnitData(res.data.data);
@@ -52,6 +52,10 @@ const NocMoveOut = ({routes, navigation}) => {
     }
     return () => { isMounted = false };
   }, []);
+
+  useEffect(() => {
+    return setBuildingData(user.building_list);
+  }, [user])
   
   const _renderItem = item => {
     return (
@@ -110,6 +114,7 @@ const NocMoveOut = ({routes, navigation}) => {
       showSuccessToast('Your request is sent successfully. Please wait for the reply.');
       NavigationService.navigate(Routes.NOC_MOVE_OUT_DASHBOARD_SCREEN);
     }).catch(err => {
+      console.log(err);
       showErrorToast('Something went wrong! Please try again.');
     });
   }

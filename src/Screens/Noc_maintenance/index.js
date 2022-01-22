@@ -33,15 +33,17 @@ const NocMoveIn = ({routes, navigation}) => {
 
   useEffect( async () => {
     let isMounted = true;    
-    setUser(JSON.parse(await AsyncStorage.getItem('USER_INFO')));
-    await axios.post(`${BASE_URL}/building/getList`).then( res => {
-      if(isMounted) {
-        if(res.data.success) {
-          setBuildingData(res.data.data);
-        }
-      }
-    }).catch(err => {
-    });
+    if(isMounted) {
+      setUser(JSON.parse(await AsyncStorage.getItem('USER_INFO')));
+    }
+    // await axios.post(`${BASE_URL}/building/getList`).then( res => {
+    //   if(isMounted) {
+    //     if(res.data.success) {
+    //       setBuildingData(res.data.data);
+    //     }
+    //   }
+    // }).catch(err => {
+    // });
     // await axios.post(`${BASE_URL}/unit/getList`).then( res => {
     //   if(res.data.success) {
     //     setUnitData(res.data.data);
@@ -51,6 +53,10 @@ const NocMoveIn = ({routes, navigation}) => {
     // });
     return () => { isMounted = false };
   }, []);
+
+  useEffect(() => {
+    return setBuildingData(user.building_list);
+  }, [user])
 
   const _renderItem = item => {
     return (
@@ -128,7 +134,7 @@ const NocMoveIn = ({routes, navigation}) => {
     const fileToUpload = singleFile;
     formData.append('trade_licence', fileToUpload);
     formData.append('building_id', dropdown);
-    formData.append('apartment_id', unitDropDown);
+    formData.append('unit_id', unitDropDown);
     formData.append('carried_date', convertDateFormat(dateString));
     formData.append('user_id', user.id);
 
