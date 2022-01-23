@@ -22,10 +22,10 @@ const HeaderScreen = (props) => {
       let isMounted = true;    
       if (isMounted) {
         if(title2) {
-            setHeight(170);
+            setHeight(80);
             setDouble(true);
         }else {
-            setHeight(130);
+            setHeight(80);
             setDouble(false);
         }
         if(type == 'home'){
@@ -39,10 +39,10 @@ const HeaderScreen = (props) => {
 
     useEffect(() => {
       if(title2) {
-          setHeight(170);
+          setHeight(80);
           setDouble(true);
       }else {
-          setHeight(130);
+          setHeight(80);
           setDouble(false);
       }
     }, [title2])
@@ -75,7 +75,7 @@ const HeaderScreen = (props) => {
                   }}>
                   {title1}
                 </Text>
-                <Text
+                {/* <Text
                   style={{
                       fontSize: 25,
                       textAlign: 'center',
@@ -83,7 +83,7 @@ const HeaderScreen = (props) => {
                       color: theme.colors.defaultText,
                   }}>
                   {title2}
-                </Text>
+                </Text> */}
             </View>
           )
         } else {
@@ -144,7 +144,8 @@ const HeaderScreen = (props) => {
                 }}
               >
                 {showIconRender()}
-                {/* <TouchableOpacity>
+                {renderHeaderString()}
+                <TouchableOpacity>
                   <Image
                     source={require('../../hero/ellipse.png')}
                     style={{
@@ -154,7 +155,7 @@ const HeaderScreen = (props) => {
                       height: 20
                     }}
                   />
-                </TouchableOpacity> */}
+                </TouchableOpacity>
               </View>
               <View style={{
                 display: 'flex',
@@ -164,7 +165,7 @@ const HeaderScreen = (props) => {
                 paddingLeft: 20,
                 paddingRight: 20
               }}>
-                {renderHeaderString()}
+                
               </View>
             </View>
         </View>

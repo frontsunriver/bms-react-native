@@ -13,10 +13,12 @@ import NavigationService from '../../Navigation';
 import AsyncStorage from '@react-native-community/async-storage';
 import { ScrollView } from 'react-native-gesture-handler';
 import FooterScreen from '../../Components/FooterScreen';
-import ChargeBalanceList from '../../Components/ChargeBalanceList';
+import useTranslation from '../../i18n';
+import HomeItem from '../../Components/HomeItem';
 
 const MainScreen = ({routes, navigation}) => {
   const {theme} = useAppTheme();
+  const {t} = useTranslation();
   const [user, setUser] = useState({});
   // eslint-disable-next-line prettier/prettier
   useEffect( async () => {
@@ -30,11 +32,12 @@ const MainScreen = ({routes, navigation}) => {
             flex: 1,
           }}>
           <ScrollView>
-            <View style={{paddingBottom: 100}}>
-              <ChargeBalanceList />
-            </View>
+              <View style={{flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 20,}}>
+                  <Text style={{color: theme.colors.background, fontSize: 50}}>{t('welcome')}</Text>
+                  <Text style={{color: '#eb6161', fontSize: 20}}>Smart owners Association</Text>
+              </View>
+              <HomeItem />
           </ScrollView>
-          <FooterScreen />
         </Container>
       </LoadingActionContainer>
   );

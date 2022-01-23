@@ -30,8 +30,8 @@ const Content = () => {
   const keyIcon = parseIconFromClassName('fas fa-key');
   const moveInIcon = parseIconFromClassName('fas fa-hand-point-right')
   const moveOutIcon = parseIconFromClassName('fas fa-hand-point-left')
-  const maintenanceIcon = parseIconFromClassName('fas fa-truck-monster')
-  const reportIcon = parseIconFromClassName('fas fa-flag');
+  const maintenanceIcon = parseIconFromClassName('fas fa-wrench');
+  const reportIcon = parseIconFromClassName('fas fa-pencil-alt');
   const messageIcon = parseIconFromClassName('fas fa-envelope');
   const settingIcon = parseIconFromClassName('fas fa-cogs');
 
@@ -93,7 +93,7 @@ const Content = () => {
           NavigationService.navigate(Routes.NOC_MAINTENANCE_SCREEN)
         }}>
           <View style={{padding: 16, flexDirection: 'row'}}>
-            <FontAwesome icon={maintenanceIcon} style={{color: theme.colors.primary, fontSize: 15}} />
+            <FontAwesome icon={maintenanceIcon} style={{color: theme.colors.primary, fontSize: 18}} />
             <Text style={{color: theme.colors.primary, marginLeft: 10}}>{t('noc_maintenance')}</Text>
           </View>
         </TouchableX>

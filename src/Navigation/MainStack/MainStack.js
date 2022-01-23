@@ -84,7 +84,7 @@ export default props => {
       <Stack.Screen
         options={{
           header: () => (
-          <HeaderScreen type="home" title1={t('dashboard')} title2={user.first_name + " " + user.last_name}/>
+          <HeaderScreen type="home" title1={user.first_name + " " + user.last_name} title2={user.first_name + " " + user.last_name}/>
         ),
         }}
         name={Routes.HOME_SCREEN}
