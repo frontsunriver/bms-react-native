@@ -4,7 +4,7 @@ import LoadingActionContainer from '../../Components/LoadingActionContainer';
 import useAppTheme from '../../Themes/Context';
 import {useStoreState} from 'easy-peasy';
 import { ScrollView } from 'react-native-gesture-handler';
-import ActionButton from '../../Components/ActionButton';
+import TabBar from 'react-native-tab-bar-footer'
 import AssociationFooterScreen from '../../Components/AssociationFooterScreen';
 import {Container} from '../../Components';
 import Routes from '../../Navigation/Routes';
@@ -91,5 +91,38 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
 });
+
+const FootTabBar = () => {
+  const tabs = [
+    {
+      title: 'Favorites'
+    },
+    {
+      title: 'Play'
+    },
+    {
+      title: 'Profile'
+    },
+  ]
+
+  const tabs1 = [
+    {
+      title: 'Favorites1'
+    },
+    {
+      title: 'Play1'
+    },
+    {
+      title: 'Profile1'
+    },
+  ]
+
+  return (
+    <>
+      <TabBar onTabChange={(index) => alert(index)} tabs={tabs} />
+      <TabBar onTabChange={(index) => alert(index)} tabs={tabs1} index={3}/>
+    </>
+  )
+}
 
 export default Dashboard;

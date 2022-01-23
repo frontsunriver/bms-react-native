@@ -5,14 +5,14 @@ import BottomTabStack from './BottomStack';
 import Routes from '../Routes';
 import useAppTheme from '../../Themes/Context';
 import useTranslation from '../../i18n';
-import NavigationStyles from '../../Styles/NavigationStyles';
 import HeaderScreen from '../../Components/HeaderScreen';
 
+import AssociationHome from '../../Screens/Association_home';
 import AssociationAnnounce from '../../Screens/Association_announce/dashboard';
 import AssociationAnnounceDetail from '../../Screens/Association_announce/Detail';
 import AssociationAnnounceSendOffer from '../../Screens/Association_announce/SendAnnounce';
-import AssociationRequest from '../../Screens/Association_home/dashboard';
-import AssociationRequestDetail from '../../Screens/Association_home/Detail';
+import AssociationRequest from '../../Screens/Association_request/dashboard'
+import AssociationRequestDetail from '../../Screens/Association_request/Detail'
 import AssociationSendOut from '../../Screens/Association_sendout/dashboard';
 import AssociationSendOutDetail from '../../Screens/Association_sendout/SendoutContact';
 import AssociationSettings from '../../Screens/Association_settings';
@@ -39,15 +39,21 @@ export default props => {
   }, []);
   return (
     <Stack.Navigator
-    initialRouteName={Routes.ASSOCIATION_REQUEST_SCREEN}>
+    initialRouteName={Routes.ASSOCIATION_HOME_SCREEN}>
       <Stack.Screen
-        options={{ header: () => ( <HeaderScreen association="true" type="home" title1={t('view_request')} title2={user.first_name + " " + user.last_name}/>)}}
+        options={{ header: () => ( <HeaderScreen association="true" type="home" title1={user.first_name + " " + user.last_name}/>)}}
+        name={Routes.ASSOCIATION_HOME_SCREEN}
+        component={AssociationHome}
+      />
+
+      <Stack.Screen
+        options={{ header: () => ( <HeaderScreen association="true" type="back" title1="PENDING REQUEST" />)}}
         name={Routes.ASSOCIATION_REQUEST_SCREEN}
         component={AssociationRequest}
       />
 
       <Stack.Screen
-        options={{ header: () => (<HeaderScreen association="true" type="back" title1={t('view_any_request_detail')}/>)}}
+        options={{ header: () => (<HeaderScreen association="true" type="back" title1="PENDING REQUEST DETAIL"/>)}}
         name={Routes.ASSOCIATION_REQUEST_DETAIL}
         component={AssociationRequestDetail}
       />

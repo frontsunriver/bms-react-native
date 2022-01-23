@@ -75,7 +75,7 @@ const Dashboard = ({routes, navigation}) => {
             </View>
           </ScrollView>
           <ActionButton url={Routes.NOC_MOVE_IN_SCREEN}/>
-          <FooterScreen />
+          <FooterScreen tabIndex={1}/>
         </Container>
       </LoadingActionContainer>
   );

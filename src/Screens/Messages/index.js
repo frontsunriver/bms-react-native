@@ -73,7 +73,7 @@ const Messages = ({route, navigation}) => {
               {renderView()}
             </View>
           </ScrollView>
-          <FooterScreen />
+          <FooterScreen tabIndex={4}/>
         </Container>
       </LoadingActionContainer>
   );

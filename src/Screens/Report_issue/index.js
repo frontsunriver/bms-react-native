@@ -225,7 +225,7 @@ const ReportIssues = ({routes, navigation}) => {
             </View>
             <Toast />
           </ScrollView>
-          <FooterScreen />
+          <FooterScreen tabIndex={5}/>
         </Container>
       </LoadingActionContainer>
   );

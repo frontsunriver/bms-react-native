@@ -159,8 +159,8 @@ const Settings = ({routes, navigation}) => {
               </View>
             </View>
             <Toast />
-            <FooterScreen />
           </ScrollView>
+          <FooterScreen tabIndex={6}/>
         </Container>
       </LoadingActionContainer>
   );
