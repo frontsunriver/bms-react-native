@@ -74,7 +74,7 @@ const NocMoveOut = ({routes, navigation}) => {
   };
 
   useEffect( () => {
-    axios.post(`${BASE_URL}/unit/getList`, {building_id: dropdown}).then( res => {
+    axios.post(`${BASE_URL}/userowner/getList`, {building_id: dropdown, user_id: user.id}).then( res => {
       if(res.data.success) {
         setUnitData(res.data.data);
       }
