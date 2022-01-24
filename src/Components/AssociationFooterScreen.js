@@ -8,8 +8,9 @@ import NavigationService from '../Navigation';
 import Routes from '../Navigation/Routes';
 import theme from '../Themes/configs/default';
 
-const AssociationFooterScreen = () => {
+const AssociationFooterScreen = (props) => {
     const {theme} = useAppTheme();
+    const {tabIndex} = props
     const {t} = useTranslation();
 
     return (
@@ -23,48 +24,48 @@ const AssociationFooterScreen = () => {
           }}>
             <View style={{flexDirection: 'column', flex: 1,}}>
                 <View style={{flexDirection: 'row', flex:1, justifyContent: 'center', backgroundColor: theme.colors.background}}>
-                    <TouchableOpacity style={styles.touchableActiveStyle} onPress={() => {
+                    <TouchableOpacity style={tabIndex == 1 ? styles.touchableActiveStyle : styles.touchableStyle} onPress={() => {
                         NavigationService.navigate(Routes.ASSOCIATION_REQUEST_SCREEN)
                     }}>
                         <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', flex: 1}}>
-                            <Text style={styles.activeTextColor}>OPEN REQUEST</Text>
+                            <Text style={tabIndex == 1 ? styles.activeTextColor : styles.normalTextColor}>OPEN REQUEST</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.touchableStyle} onPress={() => {
+                    <TouchableOpacity style={tabIndex == 2 ? styles.touchableActiveStyle : styles.touchableStyle} onPress={() => {
                         NavigationService.navigate(Routes.ASSOCIATION_ANNOUNCE_SCREEN)
                     }}>
                         <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', flex: 1}}>
-                            <Text style={styles.normalTextColor}>CLOSED REQUEST</Text>
+                            <Text style={tabIndex == 2 ? styles.activeTextColor : styles.normalTextColor}>CLOSED REQUEST</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.touchableStyle} onPress={() => {
+                    <TouchableOpacity style={tabIndex == 3 ? styles.touchableActiveStyle : styles.touchableStyle} onPress={() => {
                         NavigationService.navigate(Routes.ASSOCIATION_SENDOUT_SCREEN)
                     }}>
                         <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', flex: 1}}>
-                            <Text style={styles.normalTextColor}>REPORTS</Text>
+                            <Text style={tabIndex == 3 ? styles.activeTextColor : styles.normalTextColor}>REPORTS</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
                 <View style={{flexDirection: 'row', flex:1, justifyContent: 'center', backgroundColor: theme.colors.background}}>
-                    <TouchableOpacity style={styles.touchableActiveStyle} onPress={() => {
+                    <TouchableOpacity style={tabIndex == 4 ? styles.touchableActiveStyle : styles.touchableStyle} onPress={() => {
                         NavigationService.navigate(Routes.NOC_MOVE_IN_DASHBOARD_SCREEN)
                     }}>
                         <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', flex: 1}}>
-                            <Text style={styles.activeTextColor}>MESSAGES</Text>
+                            <Text style={tabIndex == 4 ? styles.activeTextColor : styles.normalTextColor}>MESSAGES</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.touchableStyle} onPress={() => {
+                    <TouchableOpacity style={tabIndex == 5 ? styles.touchableActiveStyle : styles.touchableStyle} onPress={() => {
                         NavigationService.navigate(Routes.NOC_MOVE_OUT_DASHBOARD_SCREEN)
                     }}>
                         <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', flex: 1}}>
-                            <Text style={styles.normalTextColor}>ISSUE REPORTED</Text>
+                            <Text style={tabIndex == 5 ? styles.activeTextColor : styles.normalTextColor}>ISSUE REPORTED</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.touchableStyle} onPress={() => {
+                    <TouchableOpacity style={tabIndex == 6 ? styles.touchableActiveStyle : styles.touchableStyle} onPress={() => {
                         NavigationService.navigate(Routes.NOC_MOVE_OUT_DASHBOARD_SCREEN)
                     }}>
                         <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', flex: 1}}>
-                            <Text style={styles.normalTextColor}>SETTINGS</Text>
+                            <Text style={tabIndex == 6 ? styles.activeTextColor : styles.normalTextColor}>SETTINGS</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -98,7 +99,13 @@ const styles = StyleSheet.create({
         fontSize: 12, 
         color: theme.colors.primary
     },
-    
+    shadowProp: {
+        shadowColor: '#000',
+        shadowOffset: {width: 10, height: 10},
+        shadowOpacity: 0.8,
+        shadowRadius: 3,
+        elevation: 10,
+    },
 })
 
 export default AssociationFooterScreen;

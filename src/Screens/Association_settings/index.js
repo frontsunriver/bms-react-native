@@ -130,7 +130,7 @@ const Settings = ({routes, navigation}) => {
             </View>
             <Toast />
           </ScrollView>
-          <AssociationFooterScreen />
+          <AssociationFooterScreen tabIndex={6}/>
         </Container>
       </LoadingActionContainer>
   );

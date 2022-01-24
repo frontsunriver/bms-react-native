@@ -72,7 +72,7 @@ const Content = () => {
         </TouchableX>
 
         <TouchableX border onPress={() => {
-          NavigationService.navigate(Routes.NOC_MOVE_IN_SCREEN)
+          NavigationService.navigate(Routes.NOC_MOVE_IN_DASHBOARD_SCREEN)
         }}>
           <View style={{padding: 16, flexDirection: 'row'}}>
             <FontAwesome icon={moveInIcon} style={{color: theme.colors.primary, fontSize: 20}} />
@@ -81,7 +81,7 @@ const Content = () => {
         </TouchableX>
 
         <TouchableX border onPress={() => {
-          NavigationService.navigate(Routes.NOC_MOVE_OUT_SCREEN)
+          NavigationService.navigate(Routes.NOC_MOVE_OUT_DASHBOARD_SCREEN)
         }}>
           <View style={{padding: 16, flexDirection: 'row'}}>
             <FontAwesome icon={moveOutIcon} style={{color: theme.colors.primary, fontSize: 20}} />
@@ -90,7 +90,7 @@ const Content = () => {
         </TouchableX>
 
         <TouchableX border onPress={() => {
-          NavigationService.navigate(Routes.NOC_MAINTENANCE_SCREEN)
+          NavigationService.navigate(Routes.NOC_MAINTENANCE_DASHBOARD_SCREEN)
         }}>
           <View style={{padding: 16, flexDirection: 'row'}}>
             <FontAwesome icon={maintenanceIcon} style={{color: theme.colors.primary, fontSize: 18}} />

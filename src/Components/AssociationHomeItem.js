@@ -17,7 +17,7 @@ const HomeItem = () => {
         <View style={{flexDirection: 'column', flex: 1, alignItems: 'center', justifyContent: 'center'}}>
             <View style={{flexDirection: 'row', margin: 10, justifyContent: 'space-between'}}>
                 <TouchableOpacity style={styles.touchableStyle} onPress={() => {
-                    NavigatService.navigate(Routes.NOC_MOVE_IN_DASHBOARD_SCREEN)
+                    NavigatService.navigate(Routes.ASSOCIATION_REQUEST_SCREEN)
                 }}>
                     <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                         <FontAwesome icon={requestIcon} style={{color: theme.colors.background, fontSize: 50}} />
@@ -25,7 +25,7 @@ const HomeItem = () => {
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.touchableStyle} onPress={() => {
-                    NavigatService.navigate(Routes.NOC_MOVE_OUT_DASHBOARD_SCREEN)
+                    NavigatService.navigate(Routes.ASSOCIATION_ARCHIEVED_SCREEN)
                 }}>
                     <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                         <FontAwesome icon={archievedIcon} style={{color: theme.colors.background, fontSize: 50}} />

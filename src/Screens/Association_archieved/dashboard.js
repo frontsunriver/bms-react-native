@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import LoadingActionContainer from '../../Components/LoadingActionContainer';
 import useAppTheme from '../../Themes/Context';
+import {useStoreState} from 'easy-peasy';
 import { ScrollView } from 'react-native-gesture-handler';
 import TabBar from 'react-native-tab-bar-footer'
 import AssociationFooterScreen from '../../Components/AssociationFooterScreen';
@@ -23,7 +24,7 @@ const Dashboard = ({route, navigation}) => {
   useEffect( async () => {
     var userInfo = JSON.parse(await AsyncStorage.getItem('USER_INFO'));
     setUser(userInfo);
-    await axios.post(`${BASE_URL}/move/getList`, {status: 1}).then( res => {
+    await axios.post(`${BASE_URL}/move/getList`, {notStatus: 1}).then( res => {
       if(res.data.success) {
         setServerData(res.data.data);
         if(res.data.data.length > 0) {
@@ -50,7 +51,7 @@ const Dashboard = ({route, navigation}) => {
       return (
         <View
           style={{justifyContent: 'center', alignItems: 'center', padding: 20}}>
-              <Text>There is no Request datas</Text>
+              <Text>There is no data</Text>
         </View>
       )
     }
@@ -90,38 +91,5 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
 });
-
-const FootTabBar = () => {
-  const tabs = [
-    {
-      title: 'Favorites'
-    },
-    {
-      title: 'Play'
-    },
-    {
-      title: 'Profile'
-    },
-  ]
-
-  const tabs1 = [
-    {
-      title: 'Favorites1'
-    },
-    {
-      title: 'Play1'
-    },
-    {
-      title: 'Profile1'
-    },
-  ]
-
-  return (
-    <>
-      <TabBar onTabChange={(index) => alert(index)} tabs={tabs} />
-      <TabBar onTabChange={(index) => alert(index)} tabs={tabs1} index={3}/>
-    </>
-  )
-}
 
 export default Dashboard;

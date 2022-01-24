@@ -54,8 +54,8 @@ const FooterScreen = (props) => {
             position: 'absolute', //Here is the trick
             bottom: 0, //Here is the trick
           }}>
-            <View style={styles.container, {flexDirection: 'column', flex: 1,}}>
-                <View style={{flexDirection: 'row', flex:1, justifyContent: 'center', backgroundColor: theme.colors.background}}>
+            <View style={{flexDirection: 'column', flex: 1,}}>
+                <View style={styles.shadowProp, {flexDirection: 'row', flex:1, justifyContent: 'center', backgroundColor: theme.colors.background}}>
                     <TouchableOpacity style={tabIndex == 1 ? styles.touchableActiveStyle : styles.touchableStyle} onPress={goMoveIn}>
                         <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', flex: 1}}>
                             <Text style={tabIndex == 1 ? styles.activeTextColor : styles.normalTextColor}>NOC MOVE IN</Text>
@@ -95,17 +95,6 @@ const FooterScreen = (props) => {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        elevation: 8,
-        shadowColor: 'black',
-        shadowOpacity: 1,
-        shadowOffset: {
-            width: 2,
-            height: 2
-        },
-        shadowRadius: 5, // <- Radius of the shadow
-        borderRadius: 5,
-    },
     touchableStyle: {
         padding: 8,
         justifyContent: 'space-between', 
@@ -130,7 +119,13 @@ const styles = StyleSheet.create({
         fontSize: 12, 
         color: theme.colors.primary
     },
-    
+    shadowProp: {
+        shadowColor: '#000',
+        shadowOffset: {width: 10, height: 10},
+        shadowOpacity: 0.8,
+        shadowRadius: 3,
+        elevation: 10,
+    },
 })
 
 export default FooterScreen;

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, TouchableOpacity, ImageBackground, Alert } from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
+import {} from '@react-navigation'
 import BottomTabStack from './BottomStack';
 import Routes from '../Routes';
 import useAppTheme from '../../Themes/Context';
@@ -13,6 +14,8 @@ import AssociationAnnounceDetail from '../../Screens/Association_announce/Detail
 import AssociationAnnounceSendOffer from '../../Screens/Association_announce/SendAnnounce';
 import AssociationRequest from '../../Screens/Association_request/dashboard'
 import AssociationRequestDetail from '../../Screens/Association_request/Detail'
+import AssociationArchieved from '../../Screens/Association_archieved/dashboard'
+import AssociationArchievedDetail from '../../Screens/Association_archieved/Detail'
 import AssociationSendOut from '../../Screens/Association_sendout/dashboard';
 import AssociationSendOutDetail from '../../Screens/Association_sendout/SendoutContact';
 import AssociationSettings from '../../Screens/Association_settings';
@@ -56,6 +59,18 @@ export default props => {
         options={{ header: () => (<HeaderScreen association="true" type="back" title1="PENDING REQUEST DETAIL"/>)}}
         name={Routes.ASSOCIATION_REQUEST_DETAIL}
         component={AssociationRequestDetail}
+      />
+
+      <Stack.Screen
+        options={{ header: () => ( <HeaderScreen association="true" type="back" title1="ARCHIEVED REQUEST" />)}}
+        name={Routes.ASSOCIATION_ARCHIEVED_SCREEN}
+        component={AssociationArchieved}
+      />
+
+      <Stack.Screen
+        options={{ header: () => (<HeaderScreen association="true" type="back" title1="ARCHIEVED REQUEST DETAIL"/>)}}
+        name={Routes.ASSOCIATION_ARCHIEVED_DETAIL_SCREEN}
+        component={AssociationArchievedDetail}
       />
       
       <Stack.Screen
