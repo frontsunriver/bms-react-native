@@ -2,9 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import LoadingActionContainer from '../../Components/LoadingActionContainer';
 import useAppTheme from '../../Themes/Context';
-import {useStoreState} from 'easy-peasy';
 import { ScrollView } from 'react-native-gesture-handler';
-import TabBar from 'react-native-tab-bar-footer'
 import AssociationFooterScreen from '../../Components/AssociationFooterScreen';
 import {Container} from '../../Components';
 import Routes from '../../Navigation/Routes';
@@ -68,7 +66,7 @@ const Dashboard = ({route, navigation}) => {
               {renderView()}
             </View>
           </ScrollView>
-          <AssociationFooterScreen tabIndex={1}/>
+          <AssociationFooterScreen tabIndex={2}/>
         </Container>
       </LoadingActionContainer>
   );

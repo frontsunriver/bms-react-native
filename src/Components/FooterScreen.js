@@ -26,7 +26,7 @@ const FooterScreen = (props) => {
     }
 
     const goReportIssues = () => {
-        NavigationService.navigate(Routes.REPORT_ISSUES_SCREEN);
+        NavigationService.navigate(Routes.REPORT_ISSUES_DASHBOARD_SCREEN);
     }
 
     const goMessages = () => {

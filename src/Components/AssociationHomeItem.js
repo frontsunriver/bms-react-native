@@ -35,7 +35,7 @@ const HomeItem = () => {
             </View>
             <View style={{flexDirection: 'row', margin: 10, justifyContent: 'space-between'}}>
                 <TouchableOpacity style={styles.touchableStyle} onPress={() => {
-                    NavigatService.navigate(Routes.NOC_MAINTENANCE_DASHBOARD_SCREEN)
+                    NavigatService.navigate(Routes.ASSOCIATION_REPORT_SCREEN)
                 }}>
                     <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                         <FontAwesome icon={reportIcon} style={{color: theme.colors.background, fontSize: 50}} />
@@ -61,7 +61,7 @@ const HomeItem = () => {
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.touchableStyle} onPress={() => {
-                    NavigatService.navigate(Routes.SETTINGS_SCREEN)
+                    NavigatService.navigate(Routes.ASSOCIATION_SETTINGS_SCREEN)
                 }}>
                     <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                         <FontAwesome icon={settingIcon} style={{color: theme.colors.background, fontSize: 50}} />

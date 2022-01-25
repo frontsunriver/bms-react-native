@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, TouchableOpacity, ImageBackground, Alert } from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {} from '@react-navigation'
 import BottomTabStack from './BottomStack';
 import Routes from '../Routes';
 import useAppTheme from '../../Themes/Context';
@@ -56,7 +55,7 @@ export default props => {
       />
 
       <Stack.Screen
-        options={{ header: () => (<HeaderScreen association="true" type="back" title1="PENDING REQUEST DETAIL"/>)}}
+        options={{ header: () => (<HeaderScreen association="true" type="back" title1="REQUEST DETAIL"/>)}}
         name={Routes.ASSOCIATION_REQUEST_DETAIL}
         component={AssociationRequestDetail}
       />

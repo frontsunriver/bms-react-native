@@ -20,6 +20,8 @@ config = use_native_modules!
 
   pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
 
+  pod 'RNFS', :path => '../node_modules/react-native-fs'
+
   target 'easy_boilerTests' do
     inherit! :complete
     # Pods for testing

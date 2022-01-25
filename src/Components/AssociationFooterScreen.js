@@ -32,14 +32,14 @@ const AssociationFooterScreen = (props) => {
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity style={tabIndex == 2 ? styles.touchableActiveStyle : styles.touchableStyle} onPress={() => {
-                        NavigationService.navigate(Routes.ASSOCIATION_ANNOUNCE_SCREEN)
+                        NavigationService.navigate(Routes.ASSOCIATION_ARCHIEVED_SCREEN)
                     }}>
                         <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', flex: 1}}>
-                            <Text style={tabIndex == 2 ? styles.activeTextColor : styles.normalTextColor}>CLOSED REQUEST</Text>
+                            <Text style={tabIndex == 2 ? styles.activeTextColor : styles.normalTextColor}>ARCHIEVED REQUEST</Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity style={tabIndex == 3 ? styles.touchableActiveStyle : styles.touchableStyle} onPress={() => {
-                        NavigationService.navigate(Routes.ASSOCIATION_SENDOUT_SCREEN)
+                        NavigationService.navigate(Routes.ASSOCIATION_REPORT_SCREEN)
                     }}>
                         <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', flex: 1}}>
                             <Text style={tabIndex == 3 ? styles.activeTextColor : styles.normalTextColor}>REPORTS</Text>

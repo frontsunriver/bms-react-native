@@ -16,7 +16,9 @@ import NocMoveOutDashboard from '../../Screens/Noc_move_out/dashboard';
 import NocMaintenanceDashboard from '../../Screens/Noc_maintenance/dashboard';
 import NocMoveOut from '../../Screens/Noc_move_out';
 import NocMaintenance from '../../Screens/Noc_maintenance';
+import ReportIssuesDashboard from '../../Screens/Report_issue/dashboard';
 import ReportIssues from '../../Screens/Report_issue';
+import ReportIssuesDetail from '../../Screens/Report_issue/detail';
 import Messages from '../../Screens/Messages';
 import MessageDetail from '../../Screens/Messages/detail';
 import Settings from '../../Screens/Settings';
@@ -156,11 +158,29 @@ export default props => {
       <Stack.Screen
         options={{
           header: () => (
+          <HeaderScreen type="back" title1="REPORT ISSUES DASHBOARD"/>
+        ),
+        }}
+        name={Routes.REPORT_ISSUES_DASHBOARD_SCREEN}
+        component={ReportIssuesDashboard}
+      />
+      <Stack.Screen
+        options={{
+          header: () => (
           <HeaderScreen type="back" title1={t('report_issue')}/>
         ),
         }}
         name={Routes.REPORT_ISSUES_SCREEN}
         component={ReportIssues}
+      />
+      <Stack.Screen
+        options={{
+          header: () => (
+          <HeaderScreen type="back" title1="REPORT ISSUES DETAIL"/>
+        ),
+        }}
+        name={Routes.REPORT_ISSUES_DETAIL_SCREEN}
+        component={ReportIssuesDetail}
       />
       <Stack.Screen
         options={{

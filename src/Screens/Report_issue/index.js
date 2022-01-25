@@ -14,10 +14,9 @@ import ImagePicker, {launchCamera} from 'react-native-image-picker';
 import AsyncStorage from '@react-native-community/async-storage';
 import {showInfoToast, showErrorToast, showSuccessToast} from '../../Lib/Toast';
 import Toast from 'react-native-tiny-toast';
-import NavigationService from '../../Navigation';
 import Routes from '../../Navigation/Routes';
 
-const ReportIssues = ({routes, navigation}) => {
+const ReportIssues = ({route, navigation}) => {
   const {t} = useTranslation();
   const {theme} = useAppTheme();
   const [user, setUser] = useState({});
@@ -148,6 +147,7 @@ const ReportIssues = ({routes, navigation}) => {
       setSummary('');
       setSingleFile(null);
       showSuccessToast('Your request is sent successfully. Please wait for the reply.');
+      navigation.goBack();
     }).catch(err => {
       showErrorToast('Something went wrong! Please try again.');
     });

@@ -53,7 +53,7 @@ const HomeItem = () => {
             </View>
             <View style={{flexDirection: 'row', margin: 10, justifyContent: 'space-between'}}>
                 <TouchableOpacity style={styles.touchableStyle} onPress={() => {
-                    NavigatService.navigate(Routes.REPORT_ISSUES_SCREEN)
+                    NavigatService.navigate(Routes.REPORT_ISSUES_DASHBOARD_SCREEN)
                 }}>
                     <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                         <FontAwesome icon={reportIcon} style={{color: theme.colors.background, fontSize: 50}} />
