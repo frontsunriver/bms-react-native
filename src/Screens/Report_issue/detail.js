@@ -35,14 +35,14 @@ const Detail = ({route, navigation}) => {
         setUser(userInfo);
         }
         await axios.post(`${BASE_URL}/notify/getDetailList`, {notify_id: data.id}).then( res => {
-        if(isMounted) {
-            if(res.data.success) {
-            if(res.data.data.length > 0) {
-                setServerData(res.data.data);
-                setViewMode(true);
+            if(isMounted) {
+                if(res.data.success) {
+                    if(res.data.data.length > 0) {
+                        setServerData(res.data.data);
+                        setViewMode(true);
+                    }
+                }
             }
-            }
-        }
         }).catch(err => {
         });
         return () => { isMounted = false };
