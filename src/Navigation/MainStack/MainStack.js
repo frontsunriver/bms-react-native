@@ -6,24 +6,32 @@ import Routes from '../Routes';
 import useAppTheme from '../../Themes/Context';
 import useTranslation from '../../i18n';
 import NavigationStyles from '../../Styles/NavigationStyles';
+import AsyncStorage from '@react-native-community/async-storage';
+
 import HeaderScreen from '../../Components/HeaderScreen';
 
 import Home from '../../Screens/Home';
+
 import ChargeDetail from '../../Screens/ChargeDetail';
+
 import NocMoveIn from '../../Screens/Noc_move_in';
 import NocMoveInDashboard from '../../Screens/Noc_move_in/dashboard';
+
 import NocMoveOutDashboard from '../../Screens/Noc_move_out/dashboard';
-import NocMaintenanceDashboard from '../../Screens/Noc_maintenance/dashboard';
 import NocMoveOut from '../../Screens/Noc_move_out';
+
+import NocMaintenanceDashboard from '../../Screens/Noc_maintenance/dashboard';
 import NocMaintenance from '../../Screens/Noc_maintenance';
+
 import ReportIssuesDashboard from '../../Screens/Report_issue/dashboard';
 import ReportIssues from '../../Screens/Report_issue';
 import ReportIssuesDetail from '../../Screens/Report_issue/detail';
+
 import MessageDashboard from '../../Screens/Messages/dashboard';
 import Message from '../../Screens/Messages';
 import MessageDetail from '../../Screens/Messages/detail';
+
 import Settings from '../../Screens/Settings';
-import AsyncStorage from '@react-native-community/async-storage';
 
 const HomeStackScreen = () => {
   const {t} = useTranslation();
@@ -93,6 +101,7 @@ export default props => {
         name={Routes.HOME_SCREEN}
         component={Home}
       />
+
       <Stack.Screen
         options={{
           header: () => (
@@ -102,6 +111,7 @@ export default props => {
         name={Routes.CHARGE_DETAIL_SCREEN}
         component={ChargeDetail}
       />
+
       <Stack.Screen
         options={{
           header: () => (
@@ -111,6 +121,7 @@ export default props => {
         name={Routes.NOC_MOVE_IN_SCREEN}
         component={NocMoveIn}
       />
+
       <Stack.Screen
         options={{
           header: () => (
@@ -120,6 +131,7 @@ export default props => {
         name={Routes.NOC_MOVE_IN_DASHBOARD_SCREEN}
         component={NocMoveInDashboard}
       />
+
       <Stack.Screen
         options={{
           header: () => (
@@ -129,6 +141,7 @@ export default props => {
         name={Routes.NOC_MOVE_OUT_SCREEN}
         component={NocMoveOut}
       />
+
       <Stack.Screen
         options={{
           header: () => (
@@ -138,6 +151,7 @@ export default props => {
         name={Routes.NOC_MOVE_OUT_DASHBOARD_SCREEN}
         component={NocMoveOutDashboard}
       />
+
       <Stack.Screen
         options={{
           header: () => (
@@ -147,6 +161,7 @@ export default props => {
         name={Routes.NOC_MAINTENANCE_SCREEN}
         component={NocMaintenance}
       />
+
       <Stack.Screen
         options={{
           header: () => (
@@ -156,6 +171,7 @@ export default props => {
         name={Routes.NOC_MAINTENANCE_DASHBOARD_SCREEN}
         component={NocMaintenanceDashboard}
       />
+
       <Stack.Screen
         options={{
           header: () => (
@@ -165,6 +181,7 @@ export default props => {
         name={Routes.REPORT_ISSUES_DASHBOARD_SCREEN}
         component={ReportIssuesDashboard}
       />
+
       <Stack.Screen
         options={{
           header: () => (
@@ -174,6 +191,7 @@ export default props => {
         name={Routes.REPORT_ISSUES_SCREEN}
         component={ReportIssues}
       />
+
       <Stack.Screen
         options={{
           header: () => (
@@ -183,6 +201,7 @@ export default props => {
         name={Routes.REPORT_ISSUES_DETAIL_SCREEN}
         component={ReportIssuesDetail}
       />
+
       <Stack.Screen
         options={{
           header: () => (
@@ -192,6 +211,7 @@ export default props => {
         name={Routes.MESSAGES_DASHBOARD}
         component={MessageDashboard}
       />
+
       <Stack.Screen
         options={{
           header: () => (
@@ -201,6 +221,7 @@ export default props => {
         name={Routes.MESSAGES_SCREEN}
         component={Message}
       />
+
       <Stack.Screen
         options={{
           header: () => (
@@ -210,6 +231,7 @@ export default props => {
         name={Routes.MESSAGES_DETAIL_SCREEN}
         component={MessageDetail}
       />
+      
       <Stack.Screen
         options={{
           header: () => (

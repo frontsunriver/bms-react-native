@@ -10,7 +10,6 @@ import { BASE_URL, DOWNLOAD_URL } from '../../Config';
 import Toast from 'react-native-tiny-toast';
 import { Button } from 'react-native-paper'
 import { showErrorToast, showSuccessToast } from '../../Lib/Toast';
-import { useNavigation, useIsFocused } from '@react-navigation/native';
 
 const Detail = ({route, navigation}) => {
   const {t} = useTranslation();
