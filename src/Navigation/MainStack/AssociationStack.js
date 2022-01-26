@@ -18,6 +18,10 @@ import AssociationArchievedDetail from '../../Screens/Association_archieved/Deta
 import AssociationSendOut from '../../Screens/Association_sendout/dashboard';
 import AssociationSendOutDetail from '../../Screens/Association_sendout/SendoutContact';
 import AssociationSettings from '../../Screens/Association_settings';
+import AssociationIssuesReportDashboard from '../../Screens/Association_issues_reported/dashboard'
+import AssociationIssuesReportDetail from '../../Screens/Association_issues_reported/detail'
+import AssociationMessageDashboard from '../../Screens/Association_message/dashboard';
+import AssociationMessageDetail from '../../Screens/Association_message/detail';
 import GetAllBuildings from '../../Screens/Association_settings/GetAllBuildings';
 import GetAllUnits from '../../Screens/Association_settings/GetAllUnits';
 import AddBuilding from '../../Screens/Association_settings/AddBuilding';
@@ -100,6 +104,30 @@ export default props => {
         options={{ header: () => (<HeaderScreen association="true" type="back" title1={t('SEND OUT MESSAGES')}/>)}}
         name={Routes.ASSOCIATION_SENDOUT_DETAIL_SCREEN}
         component={AssociationSendOutDetail}
+      />
+
+      <Stack.Screen
+        options={{ header: () => (<HeaderScreen association="true" type="back" title1="ISSUES REPORTED"/>)}}
+        name={Routes.ASSOCIATION_ISSUES_REPORTED_DASHBOARD_SCREEN}
+        component={AssociationIssuesReportDashboard}
+      />
+
+      <Stack.Screen
+        options={{ header: () => (<HeaderScreen association="true" type="back" title1="ISSUES REPORTED"/>)}}
+        name={Routes.ASSOCIATION_ISSUES_REPORTED_DETAIL_SCREEN}
+        component={AssociationIssuesReportDetail}
+      />
+
+      <Stack.Screen
+        options={{ header: () => (<HeaderScreen association="true" type="back" title1="MESSAGE"/>)}}
+        name={Routes.ASSOCIATION_MESSAGES_DASHBOARD_SCREEN}
+        component={AssociationMessageDashboard}
+      />
+      
+      <Stack.Screen
+        options={{ header: () => (<HeaderScreen association="true" type="back" title1="MESSAGE DETAIL"/>)}}
+        name={Routes.ASSOCIATION_MESSAGES_DETAIL_SCREEN}
+        component={AssociationMessageDetail}
       />
 
       <Stack.Screen

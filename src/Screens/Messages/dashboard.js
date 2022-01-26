@@ -2,14 +2,12 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
 import LoadingActionContainer from '../../Components/LoadingActionContainer';
 import useAppTheme from '../../Themes/Context';
-import {useStoreState} from 'easy-peasy';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import ActionButton from '../../Components/ActionButton';
 import FooterScreen from '../../Components/FooterScreen';
 import {Container} from '../../Components';
 import Routes from '../../Navigation/Routes';
 import theme from '../../Themes/configs/default';
-import DashboardItem from '../../Components/DashboardItem';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
 import { BASE_URL, DOWNLOAD_URL } from '../../Config';
@@ -17,7 +15,7 @@ import { useIsFocused } from '@react-navigation/native';
 import LongText from '../../Utils/LongText';
 import { useNavigation } from '@react-navigation/native';
 
-const Dashboard = ({route, navigation}) => {
+const MessageDashboard = ({route, navigation}) => {
   const {theme} = useAppTheme();
   const [user, setUser] = useState({});
   const [serverData, setServerData] = useState([]);
@@ -29,7 +27,7 @@ const Dashboard = ({route, navigation}) => {
       var userInfo = JSON.parse(await AsyncStorage.getItem('USER_INFO'));
       setUser(userInfo);
     }
-    await axios.post(`${BASE_URL}/notify/getList`, {user_id: userInfo.id}).then( res => {
+    await axios.post(`${BASE_URL}/messages/getList`, {user_id: userInfo.id}).then( res => {
       if(isMounted) {
         if(res.data.success) {
           if(res.data.data.length > 0) {
@@ -47,14 +45,14 @@ const Dashboard = ({route, navigation}) => {
     if(viewMode) {
       return (
         serverData.map(item => {
-          return <NotifyListItem key={item.id} data={item}/>
+          return <MessageListItem key={item.id} data={item}/>
         })
       )
     }else {
       return (
         <View
           style={{justifyContent: 'center', alignItems: 'center', padding: 20}}>
-              <Text>There is no Issues</Text>
+              <Text>There is no messages</Text>
         </View>
       )
     }
@@ -73,36 +71,33 @@ const Dashboard = ({route, navigation}) => {
               </View>
             </View>
           </ScrollView>
-          <ActionButton url={Routes.REPORT_ISSUES_SCREEN}/>
-          <FooterScreen tabIndex={5}/>
+          <ActionButton url={Routes.MESSAGES_SCREEN}/>
+          <FooterScreen tabIndex={4}/>
         </Container>
       </LoadingActionContainer>
   );
 };
 
-const NotifyListItem = (props) => {
+const MessageListItem = (props) => {
     const navigation = useNavigation();
     const {data} = props;
-    const uri = DOWNLOAD_URL + data.photofile;
-    const showReportDetail = () => {
-      navigation.navigate(Routes.REPORT_ISSUES_DETAIL_SCREEN, {data: data});
+    const showDashboardDetail = () => {
+      navigation.navigate(Routes.MESSAGES_DETAIL_SCREEN, {data: data});
     }
     return (
-      <TouchableOpacity onPress={showReportDetail}>
+      <TouchableOpacity onPress={showDashboardDetail}>
         <View style={{flexDirection: 'row', justifyContent: 'flex-start', flex: 1, borderBottomWidth: 0.8, borderBottomColor: '#000', padding: 5, marginTop: 5}}>
-          <View style={{flex: 1}}>
-            <Image source={{uri: uri}} style={{width: 80, height: 80}}></Image>
-          </View>
           <View style={{flexDirection: 'column', flex: 3, marginLeft: 5}}>
             <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
               <Text style={{color: '#898989'}}>{data.first_name} {data.last_name}</Text>
-              <Text style={{color: '#898989', fontSize: 11}}>{data.submit_date}</Text>
+              <Text style={{color: '#898989', fontSize: 11}}>{data.reg_date}</Text>
             </View>
-            <Text style={{marginTop: 10, paddingBottom: 5, fontSize: 15}}><LongText text={data.content} maxLength={100}/></Text>
+            <Text style={{marginTop: 10, paddingBottom: 5, fontSize: 18, fontWeight: 'bold'}}>{data.title}</Text>
+            <Text style={{marginTop: 10, paddingBottom: 5, fontSize: 14, paddingLeft: 10}}><LongText text={data.messages} maxLength={100}/></Text>
           </View>
         </View>
       </TouchableOpacity>
     )
 }
 
-export default Dashboard;
+export default MessageDashboard;

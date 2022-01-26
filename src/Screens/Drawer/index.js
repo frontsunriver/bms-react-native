@@ -98,7 +98,7 @@ const Content = () => {
           </View>
         </TouchableX>
         <TouchableX border onPress={() => {
-          NavigationService.navigate(Routes.REPORT_ISSUES_SCREEN)
+          NavigationService.navigate(Routes.REPORT_ISSUES_DASHBOARD_SCREEN)
         }}>
           <View style={{padding: 16, flexDirection: 'row'}}>
             <FontAwesome icon={reportIcon} style={{color: theme.colors.primary, fontSize: 18}} />
@@ -106,7 +106,7 @@ const Content = () => {
           </View>
         </TouchableX>
         <TouchableX border onPress={() => {
-          NavigationService.navigate(Routes.MESSAGES_SCREEN)
+          NavigationService.navigate(Routes.MESSAGES_DASHBOARD)
         }}>
           <View style={{padding: 16, flexDirection: 'row'}}>
             <FontAwesome icon={messageIcon} style={{color: theme.colors.primary, fontSize: 18}} />

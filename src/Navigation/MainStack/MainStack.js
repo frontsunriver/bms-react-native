@@ -19,7 +19,8 @@ import NocMaintenance from '../../Screens/Noc_maintenance';
 import ReportIssuesDashboard from '../../Screens/Report_issue/dashboard';
 import ReportIssues from '../../Screens/Report_issue';
 import ReportIssuesDetail from '../../Screens/Report_issue/detail';
-import Messages from '../../Screens/Messages';
+import MessageDashboard from '../../Screens/Messages/dashboard';
+import Message from '../../Screens/Messages';
 import MessageDetail from '../../Screens/Messages/detail';
 import Settings from '../../Screens/Settings';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -185,16 +186,25 @@ export default props => {
       <Stack.Screen
         options={{
           header: () => (
-          <HeaderScreen type="back" title1={t('btn_messages')}/>
+          <HeaderScreen type="back" title1="MESSAGE"/>
         ),
         }}
-        name={Routes.MESSAGES_SCREEN}
-        component={Messages}
+        name={Routes.MESSAGES_DASHBOARD}
+        component={MessageDashboard}
       />
       <Stack.Screen
         options={{
           header: () => (
-          <HeaderScreen type="back" title1={t('message_detail')}/>
+          <HeaderScreen type="back" title1="CREATE CHANNEL"/>
+        ),
+        }}
+        name={Routes.MESSAGES_SCREEN}
+        component={Message}
+      />
+      <Stack.Screen
+        options={{
+          header: () => (
+          <HeaderScreen type="back" title1="CHATTING"/>
         ),
         }}
         name={Routes.MESSAGES_DETAIL_SCREEN}

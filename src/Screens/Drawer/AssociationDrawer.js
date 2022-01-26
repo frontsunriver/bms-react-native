@@ -81,7 +81,7 @@ const Content = () => {
         </TouchableX>
 
         <TouchableX border onPress={() => {
-          NavigationService.navigate(Routes.ASSOCIATION_ANNOUNCE_SCREEN)
+          NavigationService.navigate(Routes.ASSOCIATION_ARCHIEVED_SCREEN)
         }}>
           <View style={{padding: 16, flexDirection: 'row'}}>
             <FontAwesome icon={archievedIcon} style={{color: theme.colors.primary, fontSize: 19}} />
@@ -98,7 +98,7 @@ const Content = () => {
         </TouchableX>
 
         <TouchableX border onPress={() => {
-          NavigationService.navigate(Routes.ASSOCIATION_SENDOUT_SCREEN)
+          NavigationService.navigate(Routes.ASSOCIATION_MESSAGES_DASHBOARD_SCREEN)
         }}>
           <View style={{padding: 16, flexDirection: 'row'}}>
             <FontAwesome icon={messageIcon} style={{color: theme.colors.primary, fontSize: 20}} />
@@ -106,7 +106,7 @@ const Content = () => {
           </View>
         </TouchableX>
         <TouchableX border onPress={() => {
-          NavigationService.navigate(Routes.ASSOCIATION_SETTINGS_SCREEN)
+          NavigationService.navigate(Routes.ASSOCIATION_ISSUES_REPORTED_DASHBOARD_SCREEN)
         }}>
           <View style={{padding: 16, flexDirection: 'row'}}>
             <FontAwesome icon={reportedIcon} style={{color: theme.colors.primary, fontSize: 20}} />

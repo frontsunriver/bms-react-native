@@ -48,21 +48,21 @@ const AssociationFooterScreen = (props) => {
                 </View>
                 <View style={{flexDirection: 'row', flex:1, justifyContent: 'center', backgroundColor: theme.colors.background}}>
                     <TouchableOpacity style={tabIndex == 4 ? styles.touchableActiveStyle : styles.touchableStyle} onPress={() => {
-                        NavigationService.navigate(Routes.NOC_MOVE_IN_DASHBOARD_SCREEN)
+                        NavigationService.navigate(Routes.ASSOCIATION_MESSAGES_DASHBOARD_SCREEN)
                     }}>
                         <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', flex: 1}}>
                             <Text style={tabIndex == 4 ? styles.activeTextColor : styles.normalTextColor}>MESSAGES</Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity style={tabIndex == 5 ? styles.touchableActiveStyle : styles.touchableStyle} onPress={() => {
-                        NavigationService.navigate(Routes.NOC_MOVE_OUT_DASHBOARD_SCREEN)
+                        NavigationService.navigate(Routes.ASSOCIATION_ISSUES_REPORTED_DASHBOARD_SCREEN)
                     }}>
                         <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', flex: 1}}>
                             <Text style={tabIndex == 5 ? styles.activeTextColor : styles.normalTextColor}>ISSUE REPORTED</Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity style={tabIndex == 6 ? styles.touchableActiveStyle : styles.touchableStyle} onPress={() => {
-                        NavigationService.navigate(Routes.NOC_MOVE_OUT_DASHBOARD_SCREEN)
+                        NavigationService.navigate(Routes.ASSOCIATION_SETTINGS_SCREEN)
                     }}>
                         <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', flex: 1}}>
                             <Text style={tabIndex == 6 ? styles.activeTextColor : styles.normalTextColor}>SETTINGS</Text>

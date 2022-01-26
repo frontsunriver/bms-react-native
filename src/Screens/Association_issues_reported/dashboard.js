@@ -5,7 +5,7 @@ import useAppTheme from '../../Themes/Context';
 import {useStoreState} from 'easy-peasy';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import ActionButton from '../../Components/ActionButton';
-import FooterScreen from '../../Components/FooterScreen';
+import AssociationFooterScreen from '../../Components/AssociationFooterScreen';
 import {Container} from '../../Components';
 import Routes from '../../Navigation/Routes';
 import theme from '../../Themes/configs/default';
@@ -29,7 +29,7 @@ const Dashboard = ({route, navigation}) => {
       var userInfo = JSON.parse(await AsyncStorage.getItem('USER_INFO'));
       setUser(userInfo);
     }
-    await axios.post(`${BASE_URL}/notify/getList`, {user_id: userInfo.id}).then( res => {
+    await axios.post(`${BASE_URL}/notify/getList`).then( res => {
       if(isMounted) {
         if(res.data.success) {
           if(res.data.data.length > 0) {
@@ -73,8 +73,7 @@ const Dashboard = ({route, navigation}) => {
               </View>
             </View>
           </ScrollView>
-          <ActionButton url={Routes.REPORT_ISSUES_SCREEN}/>
-          <FooterScreen tabIndex={5}/>
+          <AssociationFooterScreen tabIndex={5}/>
         </Container>
       </LoadingActionContainer>
   );
@@ -85,7 +84,7 @@ const NotifyListItem = (props) => {
     const {data} = props;
     const uri = DOWNLOAD_URL + data.photofile;
     const showReportDetail = () => {
-      navigation.navigate(Routes.REPORT_ISSUES_DETAIL_SCREEN, {data: data});
+      navigation.navigate(Routes.ASSOCIATION_ISSUES_REPORTED_DETAIL_SCREEN, {data: data});
     }
     return (
       <TouchableOpacity onPress={showReportDetail}>

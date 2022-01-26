@@ -43,7 +43,7 @@ const HomeItem = () => {
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.touchableStyle} onPress={() => {
-                    NavigatService.navigate(Routes.MESSAGES_SCREEN)
+                    NavigatService.navigate(Routes.MESSAGES_DASHBOARD)
                 }}>
                     <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                         <FontAwesome icon={messageIcon} style={{color: theme.colors.background, fontSize: 50}} />

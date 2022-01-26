@@ -30,7 +30,7 @@ const FooterScreen = (props) => {
     }
 
     const goMessages = () => {
-        NavigationService.navigate(Routes.MESSAGES_SCREEN);
+        NavigationService.navigate(Routes.MESSAGES_DASHBOARD);
     }
 
     const goSettings = () => {

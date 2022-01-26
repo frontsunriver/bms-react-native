@@ -34,7 +34,7 @@ const Detail = ({route, navigation}) => {
         var userInfo = JSON.parse(await AsyncStorage.getItem('USER_INFO'));
         setUser(userInfo);
         }
-        await axios.post(`${BASE_URL}/messages/getDetailList`, {message_id: data.id}).then( res => {
+        await axios.post(`${BASE_URL}/notify/getDetailList`, {notify_id: data.id}).then( res => {
             if(isMounted) {
                 if(res.data.success) {
                     if(res.data.data.length > 0) {
@@ -52,7 +52,7 @@ const Detail = ({route, navigation}) => {
         if(viewMode) {
             return (
                 serverData.map(item => {
-                    return <MessageListDetailItem key={item.id} data={item} userInfo={user}/>
+                    return <NotifyDetailListItem key={item.id} data={item} userInfo={user}/>
                 })
             )
         } else {
@@ -65,6 +65,14 @@ const Detail = ({route, navigation}) => {
         }
     }
 
+    const openGallery = () => {
+        setShowGallery(true);
+    }
+
+    const closeGallery = () => {
+        setShowGallery(false);
+    }
+
     const submitHandle = async () => {
         Keyboard.dismiss();
         if(comment == '') {
@@ -75,9 +83,9 @@ const Detail = ({route, navigation}) => {
         var formData = new FormData();
         formData.append('content', comment);
         formData.append('user_id', user.id);
-        formData.append('message_id', data.id);
+        formData.append('notify_id', data.id);
 
-        await axios.post(`${BASE_URL}messages/addDetail`, formData,
+        await axios.post(`${BASE_URL}notify/addDetail`, formData,
         { headers: { 'Content-Type': 'multipart/form-data', 'X-Requested-With': 'XMLHttpRequest', }}).then(res => { 
             if(res.data.success) {
                 setComment('');
@@ -92,7 +100,7 @@ const Detail = ({route, navigation}) => {
     }
 
     const fetchData = () => {
-        axios.post(`${BASE_URL}/messages/getDetailList`, {message_id: data.id}).then( res => {
+        axios.post(`${BASE_URL}/notify/getDetailList`, {notify_id: data.id}).then( res => {
             if(res.data.success) {
                 if(res.data.data.length > 0) {
                     setServerData(res.data.data);
@@ -105,6 +113,22 @@ const Detail = ({route, navigation}) => {
         });
     }
 
+    const images = [
+        {
+            source: {
+                uri: DOWNLOAD_URL + data.photofile,
+            },
+            width: width - 50,
+            height: height - 100,
+        },
+    ];
+
+    // if(showGallery) {
+    //     return(
+            
+    //     )
+    // }
+    
     return (
         <LoadingActionContainer fixed>
             <Container
@@ -116,59 +140,82 @@ const Detail = ({route, navigation}) => {
                     <View style={{paddingBottom: 50}}>
                         <View style={{flexDirection: 'column', flex: 1, marginTop: 10, padding: 10}}>
                             <View style={{paddingBottom: 10, borderBottomColor: '#e2e2e2', borderBottomWidth: 1}}>
-                                <Text style={{fontSize: 20, }}>{data.messages}</Text>
+                                <Text style={{fontSize: 20, }}>{data.content}</Text>
+                                <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+                                    <TouchableOpacity onPress={openGallery} >
+                                        <Text>View Image</Text>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
+                        {/* <Image source={{uri: DOWNLOAD_URL + data.photofile}} style={{width: (width / 3), height: (height / 3)}}></Image> */}
                             {renderView()}
+                            <View>
+                                <TextInput
+                                    style={styles.textfield}
+                                    placeholder="Please write the comment"
+                                    numberOfLines={5}
+                                    value={comment}
+                                    multiline={true}
+                                    onChangeText={text => setComment(text)}
+                                />
+                            </View>
+                            <View style={{flexDirection: 'row', justifyContent: 'center', marginTop: 15}}>
+                                <Button
+                                    mode="contained"
+                                    style={{borderRadius: 5}}
+                                    color={theme.colors.background}
+                                    onPress={submitHandle}
+                                >
+                                    <Text
+                                    style={{
+                                        fontSize: 15,
+                                        textAlign: 'center',
+                                        color: theme.colors.primary
+                                    }}>
+                                    REPLY
+                                    </Text>
+                                </Button>
+                            </View>
                         </View>
                     </View>
                 </ScrollView>
-                <View style={styles.footer}>
-                    <View style={styles.inputContainer}>
-                        <TextInput style={styles.inputs}
-                            value={comment}
-                            placeholder="Write a message..."
-                            underlineColorAndroid='transparent'
-                            onChangeText={(text) => setComment(text)}/>
-                    </View>
-
-                    <TouchableOpacity style={styles.btnSend} onPress={submitHandle}>
-                    <Image source={{uri:"https://img.icons8.com/small/75/ffffff/filled-sent.png"}} style={styles.iconSend}  />
-                    </TouchableOpacity>
-                </View>
+                <ImageView
+                    images={images}
+                    imageIndex={0}
+                    isVisible={showGallery}
+                    onClose={closeGallery}
+                />
             </Container>
         </LoadingActionContainer>
     );
 };
 
-const MessageListDetailItem = (props) => {
-    const renderDate = (date, type) => {
-        return(
-            <Text style={type == 1 ? styles.timeOut : styles.timeIn}>
-            {date}
-            </Text>
-        );
-    }
-    
+const NotifyDetailListItem = (props) => {
     const {data, userInfo} = props;
     if(data.user_id == userInfo.id) {
         return (
-            <View style={[styles.item, styles.itemOut]}>
-            {renderDate(data.reg_date, 1)}
-            <View style={[styles.balloon]}>
-              <Text style={[styles.itemOutText]}>{data.content}</Text>
-            </View>
-        </View>
+            <View style={{width:'80%', flex: 1}}>
+                <View style={{flexDirection: 'row', padding: 10, marginTop: 5, backgroundColor: theme.colors.background, borderRadius: 5}}>
+                    <View style={{flexDirection: 'column', flex: 1, marginLeft: 5}}>
+                        <Text style={{color: '#c9c6c5'}}>ME</Text>
+                        <Text style={{marginTop: 10, paddingBottom: 5, fontSize: 13, color: theme.colors.primary}}>{data.content}</Text>
+                        <Text style={{color: '#c9c6c5', fontSize: 11, justifyContent: 'flex-end', alignSelf: 'flex-end'}}>{data.submit_date}</Text>
+                    </View>
+                </View>
+            </View> 
         )
     }else {
         return (
-            <View style={[styles.item, styles.itemIn]}>
-                <View style={[styles.balloon]}>
-                  <Text>{data.content}</Text>
+            <View style={{width:'80%', flex: 1, alignSelf: 'flex-end'}}>
+                <View style={{flexDirection: 'row', padding: 10, marginTop: 5, backgroundColor: '#07a83f',borderRadius: 5}}>
+                    <View style={{flexDirection: 'column', flex: 1, marginLeft: 5}}>
+                    <Text style={{color: '#c9c6c5'}}>{data.first_name} {data.last_name}</Text>
+                        <Text style={{marginTop: 10, paddingBottom: 5, fontSize: 13, color: theme.colors.primary}}>{data.content}</Text>
+                        <Text style={{color: '#c9c6c5', fontSize: 11, justifyContent: 'flex-end', alignSelf: 'flex-end'}}>{data.submit_date}</Text>
+                    </View>
                 </View>
-                {renderDate(data.reg_date, 0)}
             </View>
         )
-        
     }
 }
 
@@ -184,85 +231,6 @@ const styles = StyleSheet.create({
         marginTop: 10,
         borderRadius: 5,
         width: '100%'
-    },
-    container:{
-        flex:1
-      },
-      list:{
-        paddingHorizontal: 17,
-      },
-      footer:{
-        flexDirection: 'row',
-        height:60,
-        backgroundColor: '#eeeeee',
-        paddingHorizontal:10,
-        padding:5,
-      },
-      btnSend:{
-        backgroundColor:"#00BFFF",
-        width:40,
-        height:40,
-        borderRadius:360,
-        alignItems:'center',
-        justifyContent:'center',
-      },
-      iconSend:{
-        width:30,
-        height:30,
-        alignSelf:'center',
-      },
-      inputContainer: {
-        borderBottomColor: '#F5FCFF',
-        backgroundColor: '#FFFFFF',
-        borderRadius:30,
-        borderBottomWidth: 1,
-        height:40,
-        flexDirection: 'row',
-        alignItems:'center',
-        flex:1,
-        marginRight:10,
-      },
-      inputs:{
-        height:40,
-        marginLeft:16,
-        borderBottomColor: '#FFFFFF',
-        flex:1,
-      },
-      balloon: {
-        maxWidth: 250,
-        padding: 15,
-        borderRadius: 20,
-      },
-      itemIn: {
-        alignSelf: 'flex-start'
-      },
-      itemOut: {
-        alignSelf: 'flex-end',
-        backgroundColor: theme.colors.background,
-        color: theme.colors.primary
-      },
-      itemOutText: {
-        color: theme.colors.primary
-      },
-      timeOut: {
-        alignSelf: 'flex-end',
-        margin: 15,
-        fontSize:12,
-        color: '#ebeced'
-      },
-      timeIn: {
-        alignSelf: 'flex-end',
-        margin: 15,
-        fontSize:12,
-        color: '#808080'
-      },
-      item: {
-        marginVertical: 14,
-        flex: 1,
-        flexDirection: 'row',
-        backgroundColor:"#eeeeee",
-        borderRadius:300,
-        padding:3,
-      },
+    }
 })
 export default Detail;

@@ -20,16 +20,113 @@ const ReportIssues = ({route, navigation}) => {
   const {t} = useTranslation();
   const {theme} = useAppTheme();
   const [user, setUser] = useState({});
-  const [title, setTitle] = useState('');
+  const [singleFile, setSingleFile] = useState(null);
   const [summary, setSummary] = useState('');
 
   useEffect( async () => {
     let isMounted = true;   
     if(isMounted) {
       setUser(JSON.parse(await AsyncStorage.getItem('USER_INFO')));
+      requestCameraPermission();
     }
     return () => { isMounted = false };
   }, [])
+
+  useEffect(() => {
+    showButton();
+  }, [singleFile])
+
+  const requestCameraPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: "App Camera Permission",
+          message:"App needs access to your camera ",
+          buttonNeutral: "Ask Me Later",
+          buttonNegative: "Cancel",
+          buttonPositive: "OK"
+        }
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      } else {
+      }
+    } catch (err) {
+    }
+  };
+
+  const showButton = () => {
+    if(singleFile == null) {
+      return(
+        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={selectFile}>
+            <View style={styles.dateTouchable}>
+              <Text>Select File</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      )
+    }else {
+      return (
+        <></>
+      )
+    }
+  }
+
+  const selectFile = () => {
+    let options = {
+      title: 'Select Image',
+      customButtons: [
+        {
+          name: 'customOptionKey',
+          title: 'Choose Photo from Custom Option'
+        },
+      ],
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+    launchCamera(options, (response) => {
+
+      if (response.didCancel) {
+      } else if (response.error) {
+      } else if (response.customButton) {
+        
+      } else {
+        // You can also display the image using data:
+        // let source = {
+        //   uri: 'data:image/jpeg;base64,' + response.data
+        // };
+        var fileObj = response.assets[0];
+        fileObj.name = fileObj.fileName;
+        setSingleFile(fileObj);
+      }
+    });
+  }
+
+  const objCast = (obj) => {
+    return obj.fileName;
+  }
+
+  const renderImage = () => {
+    if(singleFile != null){
+      return (
+        <View style={{flexDirection: 'row', justifyContent: 'center', marginTop: 15}}>
+          <TouchableOpacity onPress={selectFile}>
+            <Image source={{uri:singleFile.uri}} style={{width: 200, height: 200}}></Image>
+          </TouchableOpacity>
+        </View>
+      )
+    }else {
+      return (
+        <></>
+      )
+    }
+    
+  }
 
   const submitHandle = async () => {
     Keyboard.dismiss();
@@ -39,15 +136,16 @@ const ReportIssues = ({route, navigation}) => {
     }
 
     var formData = new FormData();
-    formData.append('messages', summary);
-    formData.append('title', title);
+    formData.append('content', summary);
+    formData.append('photofile', singleFile);
     formData.append('user_id', user.id);
+    formData.append('type', 1);
 
-    await axios.post(`${BASE_URL}messages/add`, formData,
+    await axios.post(`${BASE_URL}notify/add`, formData,
     { headers: { 'Content-Type': 'multipart/form-data', 'X-Requested-With': 'XMLHttpRequest', }}).then(res => { 
       console.log(res.data);
       setSummary('');
-      setTitle('');
+      setSingleFile(null);
       showSuccessToast('Your request is sent successfully. Please wait for the reply.');
       navigation.goBack();
     }).catch(err => {
@@ -60,16 +158,17 @@ const ReportIssues = ({route, navigation}) => {
     var message = "";
     var res = {};
 
-    if(title == '') {
-      message = "Please insert the title";
+    
+    if(summary == '') {
+      message = "Please insert the issue summary";
       result = false;
       res['success'] = result;
       res['message'] = message;
       return res;
     }
-    
-    if(summary == '') {
-      message = "Please insert the issue summary";
+
+    if(!singleFile) {
+      message = "Please select the images";
       result = false;
       res['success'] = result;
       res['message'] = message;
@@ -94,21 +193,17 @@ const ReportIssues = ({route, navigation}) => {
                 <View style={{flexDirection: 'row', justifyContent: 'center'}}>
                   <TextInput
                     style={styles.textfield}
-                    placeholder="Please insert the message title"
-                    value={title}
-                    onChangeText={text => setTitle(text)}
-                  />
-                </View>
-                <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-                  <TextInput
-                    style={styles.textfield}
-                    placeholder="Please write the content"
+                    placeholder="Please write issues"
                     numberOfLines={5}
                     value={summary}
                     multiline={true}
                     onChangeText={text => setSummary(text)}
                   />
                 </View>
+                <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+                  {renderImage()}
+                </View>
+                {showButton()}
                 <View style={{flexDirection: 'row', justifyContent: 'center', marginTop: 15}}>
                   <Button
                     mode="contained"
