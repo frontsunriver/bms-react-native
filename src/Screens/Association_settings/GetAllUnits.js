@@ -58,17 +58,7 @@ const ManageOwners = ({route, navigation}) => {
         if(res.data.success) {
           setLoading(false);
           showSuccessToast('Database is imported successfully.');
-          axios.post(`${BASE_URL}/unit/getList`, {building_id: data.id}).then( resp => {
-            if(resp.data.success) {
-              setServerData(resp.data.data);
-              setTotalCount(resp.data.data.length);
-              if(resp.data.data.length > 0) {
-                setViewMode(true);
-              }
-            }
-          }).catch(err => {
-            showErrorToast(err);
-          });
+          
           setSingleFile(null);
         }else {
           setLoading(false);
@@ -94,26 +84,71 @@ const ManageOwners = ({route, navigation}) => {
   const submitHandle = () => {
     navigate.navigate(Routes.ASSOCIATION_ADD_UNITS, {data: data});
   }
+
+  const deleteUnit = async (id) => {
+    await axios.post(`${BASE_URL}/unit/delete`, {id: id}).then( resp => {
+      if(resp.data.success) {
+        showSuccessToast('Delete Successfully');
+        fetchData();
+      }
+    }).catch(err => {
+      showErrorToast(err);
+    });
+  }
+
+  const fetchData = async () => {
+    await axios.post(`${BASE_URL}/unit/getList`, {building_id: data.id}).then( resp => {
+      if(resp.data.success) {
+        setServerData(resp.data.data);
+        setTotalCount(resp.data.data.length);
+        if(resp.data.data.length > 0) {
+          setViewMode(true);
+        }
+      }
+    }).catch(err => {
+      showErrorToast(err);
+    });
+  }
   
   const renderView = () => {
     if(viewMode) {
       return (
         <View
           style={{justifyContent: 'center', alignItems: 'center', paddingLeft: 20, paddingRight: 20}}>
-              <View style={[styles.card, styles.shadowProp]}>
                 {serverData.map(data => {
                   return (
-                    <View key={data.id}
-                    style={{borderRadius: 3, backgroundColor: '#ddd', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 20, borderBottomColor: '#e2e2e2', borderBottomWidth: 0.8, marginTop: 5}}>
-                        <View style={{flexDirection: 'column', justifyContent: "space-between", alignItems: 'flex-start', alignContent: 'center'}}>
-                            <View style={{flexDirection: 'row', justifyContent: 'space-between', alignContent: 'space-between'}}>
-                                <View><Text>{data.unit_name}</Text></View>
-                            </View>
-                        </View>
+                    <View key={data.id} style={[styles.card, styles.shadowProp]}>
+                      <View 
+                      style={{borderRadius: 3, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 20, borderBottomColor: '#ddd', borderBottomWidth: 2, marginTop: 5}}>
+                          <View style={{flexDirection: 'column', justifyContent: "space-between", alignItems: 'flex-start', alignContent: 'center'}}>
+                              <View style={{flexDirection: 'row', justifyContent: 'space-between', alignContent: 'space-between'}}>
+                                  <View><Text>{data.unit_name}</Text></View>
+                              </View>
+                          </View>
+                      </View>
+                      <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 5, paddingBottom: 10}}>
+                        <Button loading={loading} mode="contained" style={{borderRadius: 5, marginLeft: 5}} color={theme.colors.background}
+                          onPress={() => {
+                            navigate.navigate(Routes.ASSOCIATION_UPDATAE_UNITS_SCREEN, {data: data})
+                          }}
+                        >
+                          <Text style={{ fontSize: 11, textAlign: 'center', color: theme.colors.primary }}>
+                            Edit
+                          </Text>
+                        </Button>
+                        <Button loading={loading} mode="contained" style={{borderRadius: 5, marginLeft: 5}} color={theme.colors.background}
+                          onPress={() => {
+                            deleteUnit(data.id);
+                          }}
+                        >
+                          <Text style={{ fontSize: 11, textAlign: 'center', color: theme.colors.primary }}>
+                            Delete
+                          </Text>
+                        </Button>
+                      </View>
                     </View>
                   )
                 })}
-              </View>
         </View>
       )
     }else {
@@ -190,7 +225,6 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: theme.colors.primary,
-    paddingVertical: 20,
     paddingHorizontal: 15,
     borderRadius: 8,
     width: '100%',

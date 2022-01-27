@@ -18,7 +18,7 @@ import Toast from 'react-native-tiny-toast';
 import NavigationService from '../../Navigation';
 import Routes from '../../Navigation/Routes';
 
-const AddUnit = ({route, navigation}) => {
+const EditUnit = ({route, navigation}) => {
   const {t} = useTranslation();
   const {theme} = useAppTheme();
   const {data} = route.params;
@@ -27,6 +27,7 @@ const AddUnit = ({route, navigation}) => {
 
   useEffect( async () => {
     setUser(JSON.parse(await AsyncStorage.getItem('USER_INFO')));
+    setName(data.unit_name)
   }, []);
 
   const submitHandle = async (e) => {
@@ -38,12 +39,13 @@ const AddUnit = ({route, navigation}) => {
     
     var formData = new FormData();
     formData.append('unit_name', name);
-    formData.append('building_id', data.id);
+    formData.append('id', data.id);
 
-    await axios.post(`${BASE_URL}unit/add`, formData,
+    await axios.post(`${BASE_URL}unit/update`, formData,
     { headers: { 'Content-Type': 'multipart/form-data', 'X-Requested-With': 'XMLHttpRequest', }}).then(res => { 
       setName('');
       showSuccessToast('Your request is sent successfully. Please wait for the reply.');
+      navigation.goBack();
     }).catch(err => {
       showErrorToast('Something went wrong! Please try again.');
     });
@@ -93,7 +95,7 @@ const AddUnit = ({route, navigation}) => {
                         textAlign: 'center',
                         color: theme.colors.primary
                       }}>
-                      ADD
+                      UPDATE
                     </Text>
                   </Button>
                 </View>
@@ -175,4 +177,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default AddUnit;
+export default EditUnit;

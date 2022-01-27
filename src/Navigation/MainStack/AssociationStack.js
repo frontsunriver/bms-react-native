@@ -25,6 +25,8 @@ import AssociationMessageDetail from '../../Screens/Association_message/detail';
 import GetAllBuildings from '../../Screens/Association_settings/GetAllBuildings';
 import GetAllUnits from '../../Screens/Association_settings/GetAllUnits';
 import AddBuilding from '../../Screens/Association_settings/AddBuilding';
+import UpdateBuilding from '../../Screens/Association_settings/EditBuilding';
+import UpdateUnit from '../../Screens/Association_settings/EditUnit';
 import AddUnit from '../../Screens/Association_settings/AddUnit';
 import OwnerDetail from '../../Screens/Association_settings/OwnerDetail';
 import OnwerBuildingUnit from '../../Screens/Association_settings/UserOwnerBuilding';
@@ -155,9 +157,21 @@ export default props => {
       />
 
       <Stack.Screen
+        options={{ header: () => ( <HeaderScreen association="true" type="back" title1="UPDATE BUILDING"/> )}}
+        name={Routes.ASSOCIATION_EDIT_BUILDING_SCREEN}
+        component={UpdateBuilding}
+      />
+
+      <Stack.Screen
         options={{ header: () => ( <HeaderScreen association="true" type="back" title1="ADD UNIT"/> )}}
         name={Routes.ASSOCIATION_ADD_UNITS}
         component={AddUnit}
+      />
+      
+      <Stack.Screen
+        options={{ header: () => ( <HeaderScreen association="true" type="back" title1="UPDATE UNIT"/> )}}
+        name={Routes.ASSOCIATION_UPDATAE_UNITS_SCREEN}
+        component={UpdateUnit}
       />
 
       <Stack.Screen

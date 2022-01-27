@@ -18,15 +18,18 @@ import Toast from 'react-native-tiny-toast';
 import NavigationService from '../../Navigation';
 import Routes from '../../Navigation/Routes';
 
-const AddUnit = ({route, navigation}) => {
+const EditBuilding = ({route, navigation}) => {
   const {t} = useTranslation();
   const {theme} = useAppTheme();
-  const {data} = route.params;
+  const { data } = route.params;
   const [user, setUser] = useState({});
   const [name, setName] = useState('');
+  const [address, setAddress] = useState('');
 
   useEffect( async () => {
     setUser(JSON.parse(await AsyncStorage.getItem('USER_INFO')));
+    setName(data.name);
+    setAddress(data.address);
   }, []);
 
   const submitHandle = async (e) => {
@@ -37,13 +40,16 @@ const AddUnit = ({route, navigation}) => {
     }
     
     var formData = new FormData();
-    formData.append('unit_name', name);
-    formData.append('building_id', data.id);
+    formData.append('id', data.id);
+    formData.append('name', name);
+    formData.append('address', address);
 
-    await axios.post(`${BASE_URL}unit/add`, formData,
+    await axios.post(`${BASE_URL}building/update`, formData,
     { headers: { 'Content-Type': 'multipart/form-data', 'X-Requested-With': 'XMLHttpRequest', }}).then(res => { 
+      setAddress('');
       setName('');
       showSuccessToast('Your request is sent successfully. Please wait for the reply.');
+      navigation.goBack();
     }).catch(err => {
       showErrorToast('Something went wrong! Please try again.');
     });
@@ -54,13 +60,19 @@ const AddUnit = ({route, navigation}) => {
     var message = "";
     var res = {};
     if(!name || name == ''){
-      message = "Please insert the Unit name";
+      message = "Please insert the building name";
       result = false;
       res['success'] = result;
       res['message'] = message;
       return res;
     }
-
+    if(!address || address == ''){
+      message = "Please insert the building address";
+      result = false;
+      res['success'] = result;
+      res['message'] = message;
+      return res;
+    }
     res['success'] = result;
     res['message'] = message;
     return res;
@@ -77,8 +89,12 @@ const AddUnit = ({route, navigation}) => {
             <View style={{paddingBottom: 100}}>
               <View style={{flexDirection: 'column', justifyContent: 'center', padding: 20}}>
                 <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-                  <Text style={{width: '50%', marginTop: 15}}>{t('Unit Name')}</Text>
+                  <Text style={{width: '50%', marginTop: 15}}>{t('Building Name')}</Text>
                   <TextInput style={styles.textfield} value={name} name="name" onChangeText={text => setName(text)}/>
+                </View>
+                <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
+                  <Text style={{width: '50%', marginTop: 15}}>{t('Building Address')}</Text>
+                  <TextInput style={styles.textfield} value={address} name="address" onChangeText={text => setAddress(text)}/>
                 </View>
                 <View style={{flexDirection: 'row', justifyContent: 'flex-end', marginTop: 15}}>
                   <Button
@@ -93,7 +109,7 @@ const AddUnit = ({route, navigation}) => {
                         textAlign: 'center',
                         color: theme.colors.primary
                       }}>
-                      ADD
+                      UPDATE
                     </Text>
                   </Button>
                 </View>
@@ -175,4 +191,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default AddUnit;
+export default EditBuilding;

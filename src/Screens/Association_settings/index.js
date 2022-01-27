@@ -86,7 +86,7 @@ const Settings = ({routes, navigation}) => {
                           textAlign: 'center',
                           color: theme.colors.primary
                         }}>
-                        Add new Building
+                        Manage Building
                       </Text>
                     </Button>
                   </View>

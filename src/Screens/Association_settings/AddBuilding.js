@@ -95,7 +95,7 @@ const AddBuilding = ({routes, navigation}) => {
                 <View style={{flexDirection: 'row', justifyContent: 'flex-end', marginTop: 15}}>
                   <Button
                     mode="contained"
-                    style={{borderRadius: 5, padding: 5}}
+                    style={{borderRadius: 5}}
                     color={theme.colors.background}
                     onPress={submitHandle}
                   >

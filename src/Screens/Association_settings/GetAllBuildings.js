@@ -14,6 +14,7 @@ import { useIsFocused } from '@react-navigation/native';
 import Routes from '../../Navigation/Routes';
 import { useNavigation } from '@react-navigation/native';
 import { showErrorToast, showSuccessToast } from '../../Lib/Toast';
+import FontAwesome, { parseIconFromClassName, Icons } from 'react-native-fontawesome'
 
 const ManageOwners = ({route, navigation}) => {
   const {theme} = useAppTheme();
@@ -25,6 +26,10 @@ const ManageOwners = ({route, navigation}) => {
   const [loading, setLoading] = useState(false);
   const isFocused = useIsFocused();
   const navigate = useNavigation();
+
+  const apartmentIcon = parseIconFromClassName('far fa-building');
+  const homeIcon = parseIconFromClassName('fas fa-home');
+  const deleteIcon = parseIconFromClassName('fas fa-trash');
 
   useEffect( async () => {
     let isMounted = true;    
@@ -68,18 +73,8 @@ const ManageOwners = ({route, navigation}) => {
         if(res.data.success) {
           setLoading(false);
           showSuccessToast('Database is imported successfully.');
-          axios.post(`${BASE_URL}/building/getListWithUnit`).then( resp => {
-            if(resp.data.success) {
-              setServerData(resp.data.data);
-              setTotalCount(resp.data.data.length);
-              if(resp.data.data.length > 0) {
-                setViewMode(true);
-              }
-            }
-          }).catch(err => {
-            showErrorToast(err);
-          });
           setSingleFile(null);
+          fetchData();
         }else {
           setLoading(false);
           showErrorToast(res.data.message);
@@ -101,8 +96,33 @@ const ManageOwners = ({route, navigation}) => {
     }
   }
 
+  const fetchData = async () => {
+    await axios.post(`${BASE_URL}/building/getListWithUnit`).then( resp => {
+      if(resp.data.success) {
+        setServerData(resp.data.data);
+        setTotalCount(resp.data.data.length);
+        if(resp.data.data.length > 0) {
+          setViewMode(true);
+        }
+      }
+    }).catch(err => {
+      showErrorToast(err);
+    });
+  }
+
   const submitHandle = () => {
     navigate.navigate(Routes.ASSOCIATION_ADD_BUILDINGS)
+  }
+
+  const deleteBuilding = async (id) => {
+    await axios.post(`${BASE_URL}/building/delete`, {id: id}).then( resp => {
+      if(resp.data.success) {
+        showSuccessToast('Delete Successfully');
+          fetchData();
+      }
+    }).catch(err => {
+      showErrorToast(err);
+    });
   }
   
   const renderView = () => {
@@ -110,23 +130,49 @@ const ManageOwners = ({route, navigation}) => {
       return (
         <View
           style={{justifyContent: 'center', alignItems: 'center', paddingLeft: 20, paddingRight: 20}}>
-              <View style={[styles.card, styles.shadowProp]}>
+              
                 {serverData.map(data => {
                   return (
-                    <TouchableOpacity key={data.id} onPress={() => {navigate.navigate(Routes.ASSOCIATION_GET_UNIT_LIST, {data: data})}}>
-                    <View
-                    style={{borderRadius: 3, backgroundColor: '#ddd', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 20, borderBottomColor: '#e2e2e2', borderBottomWidth: 0.8, marginTop: 5}}>
-                        <View style={{flexDirection: 'row', justifyContent: "space-between", alignItems: 'flex-start', alignContent: 'center'}}>
-                            <View style={{flexDirection: 'row', flex: 2, justifyContent: 'space-between', alignContent: 'space-between', alignItems: 'center'}}>
-                                <Text style={{flexDirection: 'row', }}>{data.name}</Text>
-                                <Text style={{alignItems: 'flex-end', justifyContent: 'flex-end', alignContent:'flex-end', flexDirection: 'row'}}>Units: {data.cnt}</Text>
+                    <View style={[styles.card, styles.shadowProp]}>
+                      <TouchableOpacity key={data.id} onPress={() => {navigate.navigate(Routes.ASSOCIATION_GET_UNIT_LIST, {data: data})}}>
+                        <View
+                        style={{borderRadius: 3, padding: 20, borderBottomColor: '#ddd', borderBottomWidth: 2, }}>
+                            <View style={{flex: 1}}>
+                                <View style={{flexDirection: 'row', flex: 1}}>
+                                    <FontAwesome icon={apartmentIcon} style={{color: theme.colors.background, fontSize: 20, marginTop: 3}} /><Text style={{flexDirection: 'row', marginLeft: 5, fontSize: 20}}>{data.name}</Text>
+                                </View>
+                                <View style={{flexDirection: 'row', flex: 1, paddingLeft:5, paddingTop: 10}}>
+                                    <FontAwesome icon={homeIcon} style={{color: theme.colors.background, fontSize: 15, marginTop: 2}} /><Text style={{marginLeft: 5}}>Unit: {data.cnt}</Text>
+                                </View>
                             </View>
                         </View>
+                      </TouchableOpacity>
+
+                      <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 5, paddingBottom: 10}}>
+                        
+                        <Button loading={loading} mode="contained" style={{borderRadius: 5, marginLeft: 5}} color={theme.colors.background}
+                          onPress={() => {
+                            navigate.navigate(Routes.ASSOCIATION_EDIT_BUILDING_SCREEN, {data: data})
+                          }}
+                        >
+                          <Text style={{ fontSize: 11, textAlign: 'center', color: theme.colors.primary }}>
+                            Edit
+                          </Text>
+                        </Button>
+                        <Button loading={loading} mode="contained" style={{borderRadius: 5, marginLeft: 5}} color={theme.colors.background}
+                          onPress={() => {
+                            deleteBuilding(data.id);
+                          }}
+                        >
+                          <Text style={{ fontSize: 11, textAlign: 'center', color: theme.colors.primary }}>
+                            Delete
+                          </Text>
+                        </Button>
+                      </View>
                     </View>
-                    </TouchableOpacity>
                   )
                 })}
-              </View>
+              
         </View>
       )
     }else {
@@ -146,7 +192,7 @@ const ManageOwners = ({route, navigation}) => {
             flex: 1,
           }}>
           <ScrollView>
-            <View style={{paddingBottom: 100}}>
+            <View>
               <View style={{flexDirection: 'column', padding: 20, }}>
                   <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingBottom: 5, borderBottomColor: '#e2e2e2', borderBottomWidth: 1}}>
                     <Text style={{top: 10}}>Total {totalCount}</Text>
@@ -205,7 +251,6 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: theme.colors.primary,
-    paddingVertical: 20,
     paddingHorizontal: 15,
     borderRadius: 8,
     width: '100%',
