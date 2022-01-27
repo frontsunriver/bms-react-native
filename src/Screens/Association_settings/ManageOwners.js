@@ -68,7 +68,7 @@ const ManageOwners = ({route, navigation}) => {
       return (
         <View
           style={{justifyContent: 'center', alignItems: 'center', padding: 20}}>
-              <Text>There is no Request datas</Text>
+              <Text>There is no datas</Text>
         </View>
       )
     }

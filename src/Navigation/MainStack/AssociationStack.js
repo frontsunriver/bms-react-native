@@ -31,6 +31,7 @@ import AddUnit from '../../Screens/Association_settings/AddUnit';
 import OwnerDetail from '../../Screens/Association_settings/OwnerDetail';
 import OnwerBuildingUnit from '../../Screens/Association_settings/UserOwnerBuilding';
 import AddBuildingAndUnit from '../../Screens/Association_settings/AddUnitAndBuilding';
+import EditBuildingAndUnit from '../../Screens/Association_settings/EditUnitAndBuilding';
 import ManageOwners from '../../Screens/Association_settings/ManageOwners';
 import Report from '../../Screens/Association_Report';
 import Search from '../../Screens/Association_Search';
@@ -196,6 +197,12 @@ export default props => {
         options={{ header: () => ( <HeaderScreen association="true" type="back" title1="ADD BUILDINGS AND UNITS"/> )}}
         name={Routes.ASSOCIATION_ADD_BUILDINGS_UNITS}
         component={AddBuildingAndUnit}
+      />
+
+      <Stack.Screen
+        options={{ header: () => ( <HeaderScreen association="true" type="back" title1="EDIT BUILDINGS AND UNITS"/> )}}
+        name={Routes.ASSOCIATION_EDIT_OWNER_DETAIL}
+        component={EditBuildingAndUnit}
       />
 
       <Stack.Screen

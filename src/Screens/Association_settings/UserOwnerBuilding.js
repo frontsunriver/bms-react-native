@@ -24,15 +24,18 @@ const UserOwnerBuilding = ({route, navigation}) => {
   const navigate = useNavigation();
 
   useEffect(async () => {
+    console.log(data.id);
     await axios.post(`${BASE_URL}user/search`, {id: data.id}).then(res => { 
     if(res.data.success) {
         if(res.data.data.length > 0){
-        setServerData(res.data.data);
+          console.log(res.data.data);
+          setServerData(res.data.data);
         }else {
-        setServerData([]);
+          setServerData([]);
         }
     }
     }).catch(err => {
+      console.log(err);
     });  
   }, [isFocused])
 
@@ -41,9 +44,12 @@ const UserOwnerBuilding = ({route, navigation}) => {
       var index = 0;
       return serverData.map(data => {
         return (
-          <View key={index++} style={{backgroundColor: theme.colors.background, flexDirection: 'column', marginTop: 10, alignItems:'flex-start', alignContent:'space-between', marginTop: 5, padding: 10, borderRadius: 5}}>
+          <View key={index++} style={{backgroundColor: theme.colors.background, marginTop: 10, alignItems:'flex-start', alignContent:'space-between', marginTop: 5, padding: 10, borderRadius: 5}}>
               <UserInfo data={data.user_info}/>
-              <BuildingInfo data={data.building_info}/>
+              <View style={{flex: 1, padding: 10}}>
+                <BuildingInfo data={data.building_info}/>
+              </View>
+              
           </View>
         )
       })
@@ -95,7 +101,6 @@ const UserOwnerBuilding = ({route, navigation}) => {
             </View>
             <Toast />
           </ScrollView>
-          <AssociationFooterScreen />
         </Container>
       </LoadingActionContainer>
   );
@@ -111,15 +116,58 @@ const UserInfo = (props) => {
 }
 
 const BuildingInfo = (props) => {
+  const navigation = useNavigation();
   const {data} = props;
+  const [ownerData, setOwnerData] = useState(data);
+  const goUpdateBuildingAndUnit = (item) => {
+    navigation.navigate(Routes.ASSOCIATION_EDIT_OWNER_DETAIL, {data: item});
+  }
+
+  const deleteOwner = (item) => {
+    console.log(item);
+    Alert.alert(
+      "Confirm",
+      "Are you sure to delete?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel"
+        },
+        { text: "OK", onPress: () => {
+          axios.post(`${BASE_URL}userowner/delete`, {id: item.id}).then(res => { 
+            if(res.data.success){
+              showSuccessToast('Delete success');
+              var index = ownerData.indexOf(item);
+              if (index !== -1) {
+                var tmp = ownerData.filter((res1, i)=>{
+                  return index != i
+                });
+                setOwnerData(tmp);
+              }
+            }else {
+              showErrorToast(res.data.message);
+            }
+          });
+          
+        }}
+      ]
+    );
+  }
   const renderContent = () => {
     if(data.length > 0) {
-      return data.map(item => {
+      return ownerData.map(item => {
         return (
-          <View key={item.id + item.unit_name + item.name} style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', alignContent:'space-between', width: '100%'}}>
-            <Text style={{ color: '#fff'}}>{item.building_name}</Text>
-            <Text style={{ color: '#fff'}}>{item.unit_name}</Text>
-          </View>
+          <TouchableOpacity key={item.id + item.unit_name + item.name} 
+            onPress={() => {goUpdateBuildingAndUnit(item)}}
+            onLongPress={() => {deleteOwner(item)}}
+          >
+            <View style={{flexDirection: 'row', justifyContent: 'space-between', backgroundColor: '#fff', padding: 20, borderRadius: 30, flexWrap: 'wrap', alignItems: 'flex-start', marginTop: 5}}>
+              <Text style={{ color: '#000', width: '70%', fontSize: 15, fontWeight: 'bold'}}>{item.building_name}</Text>
+              <View style={{width: '30%', justifyContent: 'flex-end', alignItems: 'flex-end', alignSelf: 'flex-end', alignContent: 'flex-end'}}>
+                <Text style={{ color: '#000'}}>{item.unit_name}</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
         )
       })
     }else {
