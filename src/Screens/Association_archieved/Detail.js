@@ -10,14 +10,23 @@ import { BASE_URL, DOWNLOAD_URL } from '../../Config';
 import Toast from 'react-native-tiny-toast';
 import { Button } from 'react-native-paper'
 import { showErrorToast, showSuccessToast } from '../../Lib/Toast';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
+import RNFetchBlob from 'rn-fetch-blob'
+import FontAwesome, { parseIconFromClassName, Icons } from 'react-native-fontawesome'
 
 const Detail = ({route, navigation}) => {
   const {t} = useTranslation();
   const {theme} = useAppTheme();
   const {data} = route.params;
+  const [reply, setReply] = useState('');
+  const [showIssues, setShowIssues] = useState(false);
+  const [rejectButton, setRejectButton] = useState('reject');
+  const { config, fs } = RNFetchBlob;
+  const downloadIcon = parseIconFromClassName('fas fa-download')
+  let DownloadDir = fs.dirs.DownloadDir;
 
   const approvedHandle = (e) => {
-    axios.post(`${BASE_URL}/move/update`, {id: data.id, status: 2}).then( res => {
+    axios.post(`${BASE_URL}move/update`, {id: data.id, status: 2}).then( res => {
         if(res.data.success) {
           showSuccessToast('This movement is approved');
           navigation.goBack();
@@ -30,7 +39,16 @@ const Detail = ({route, navigation}) => {
   }
 
   const cancelHandle = (e) => {
-    axios.post(`${BASE_URL}/move/update`, {id: data.id, status: 3}).then( res => {
+    if(reply == '') {
+        showErrorToast('Please insert the issues');
+        return;
+    }
+    var formData = new FormData();
+    formData.append('id', data.id);
+    formData.append('status', 3);
+    formData.append('reply', reply);
+    axios.post(`${BASE_URL}move/reject`, formData, 
+    { headers: { 'Content-Type': 'multipart/form-data', 'X-Requested-With': 'XMLHttpRequest', }}).then( res => {
         if(res.data.success) {
           showSuccessToast('This movement is rejected');
           navigation.goBack();
@@ -38,9 +56,42 @@ const Detail = ({route, navigation}) => {
           showErrorToast(res.data.message);
         }
       }).catch( err => {
+          console.log(err);
         showErrorToast('Server Error. Please try again.');
     });
   }
+
+  const fileDonwload = (url) => {
+    var extension = url.split('.').pop();
+    var fileName = new Date().getTime() + "." + extension;
+    let options = {
+        fileCache: true,
+        addAndroidDownloads : {
+          useDownloadManager : true, // setting it to true will use the device's native download manager and will be shown in the notification bar.
+          notification : false,
+          path:  DownloadDir + "/" + fileName, // this is the path where your downloaded file will live in
+          description : 'Downloading image.'
+        }
+      }
+      config(options).fetch('GET', `${DOWNLOAD_URL}` + url).then((res) => {
+        showSuccessToast("Download successfully. filename: " + fileName);
+      })
+  }
+
+  downloadFile = async (url) => {
+    try {
+        const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            fileDonwload(url);
+        } else {
+          Alert.alert('Permission Denied!', 'You need to give storage permission to download the file');
+        }
+    } catch (err) {
+        console.log(err);
+    } 
+  }
+
+
 
   const renderData = () => {
     if(data.move_type == 1) {
@@ -58,6 +109,10 @@ const Detail = ({route, navigation}) => {
                     <Text style={{flex: 3}}>{data.building_name}</Text>
                 </View>
                 <View style={{flexDirection: 'row', paddingTop: 5}}>
+                    <Text style={{flex: 2}}>Unit :</Text>
+                    <Text style={{flex: 3}}>{data.unit_name}</Text>
+                </View>
+                <View style={{flexDirection: 'row', paddingTop: 5}}>
                     <Text style={{flex: 2}}>Tenant Name :</Text>
                     <Text style={{flex: 3}}>{data.tenants_name}</Text>
                 </View>
@@ -69,16 +124,59 @@ const Detail = ({route, navigation}) => {
                     <Text style={{flex: 2}}>Tenant mobile :</Text>
                     <Text style={{flex: 3}}>{data.tenants_mobile}</Text>
                 </View>
+                <View style={{flexDirection: 'row', paddingTop: 5}}>
+                    <Text style={{flex: 2}}>Onwer Passport :</Text>
+                    <View style={{flex: 3}}>
+                        <TouchableOpacity style={{flex: 3, justifyContent: 'flex-start'}} onPress={() => {
+                        downloadFile(data.owner_passport)}}><FontAwesome icon={downloadIcon} style={{color: theme.colors.background, fontSize: 20}} /></TouchableOpacity>
+                    </View>
+                </View>
+                <View style={{flexDirection: 'row', paddingTop: 5}}>
+                    <Text style={{flex: 2}}>Title Deed :</Text>
+                    <View style={{flex: 3}}>
+                        <TouchableOpacity style={{flex: 3, justifyContent: 'flex-start'}} onPress={() => {
+                        downloadFile(data.title_deed)}}><FontAwesome icon={downloadIcon} style={{color: theme.colors.background, fontSize: 20}} /></TouchableOpacity>
+                    </View>
+                </View>
+                <View style={{flexDirection: 'row', paddingTop: 5}}>
+                    <Text style={{flex: 2}}>Tenancy Contract :</Text>
+                    <View style={{flex: 3}}>
+                        <TouchableOpacity style={{flex: 3, justifyContent: 'flex-start'}} onPress={() => {
+                        downloadFile(data.contract)}}><FontAwesome icon={downloadIcon} style={{color: theme.colors.background, fontSize: 20}} /></TouchableOpacity>
+                    </View>
+                </View>
+                <View style={{flexDirection: 'row', paddingTop: 5}}>
+                    <Text style={{flex: 2}}>Tenants Passport :</Text>
+                    <View style={{flex: 3}}>
+                        <TouchableOpacity style={{flex: 3, justifyContent: 'flex-start'}} onPress={() => {
+                        downloadFile(data.tenants_passport)}}><FontAwesome icon={downloadIcon} style={{color: theme.colors.background, fontSize: 20}} /></TouchableOpacity>
+                    </View>
+                </View>
+                <View style={{flexDirection: 'row', paddingTop: 5}}>
+                    <Text style={{flex: 2}}>Tenants Visa :</Text>
+                    <View style={{flex: 3}}>
+                        <TouchableOpacity style={{flex: 3, justifyContent: 'flex-start'}} onPress={() => {
+                        downloadFile(data.tenants_visa)}}><FontAwesome icon={downloadIcon} style={{color: theme.colors.background, fontSize: 20}} /></TouchableOpacity>
+                    </View>
+                </View>
+                <View style={{flexDirection: 'row', paddingTop: 5}}>
+                    <Text style={{flex: 2}}>Tenants Emirates ID :</Text>
+                    <View style={{flex: 3}}>
+                        <TouchableOpacity style={{flex: 3, justifyContent: 'flex-start'}} onPress={() => {
+                        downloadFile(data.tenants_emirates_id)}}><FontAwesome icon={downloadIcon} style={{color: theme.colors.background, fontSize: 20}} /></TouchableOpacity>
+                    </View>
+                </View>
+                {showRnderIssuesPanel()}
             </View>
         )
-    }else {
+    }else if (data.move_type == 2){
         return (
             <View style={{flexDirection: 'column', marginTop: 5}}>
                 <View style={{flexDirection: 'row', paddingTop: 5}}>
                     <Text style={{flex: 2}}>Request User: </Text>
                     <View style={{flexDirection: 'row', flex: 3}}>
                         <Text>{data.first_name} </Text>
-                        <Text>{data.first_name}</Text>
+                        <Text>{data.last_name}</Text>
                     </View>
                     
                 </View>
@@ -86,9 +184,97 @@ const Detail = ({route, navigation}) => {
                     <Text style={{flex: 2}}>Building Name :</Text>
                     <Text style={{flex: 3}}>{data.building_name}</Text>
                 </View>
+                <View style={{flexDirection: 'row', paddingTop: 5}}>
+                    <Text style={{flex: 2}}>Unit :</Text>
+                    <Text style={{flex: 3}}>{data.unit_name}</Text>
+                </View>
+                {showRnderIssuesPanel()}
+            </View>
+        )
+    } else {
+        return (
+            <View style={{flexDirection: 'column', marginTop: 5}}>
+                <View style={{flexDirection: 'row', paddingTop: 5}}>
+                    <Text style={{flex: 2}}>Request User: </Text>
+                    <View style={{flexDirection: 'row', flex: 3}}>
+                        <Text>{data.first_name} </Text>
+                        <Text>{data.last_name}</Text>
+                    </View>
+                    
+                </View>
+                <View style={{flexDirection: 'row', paddingTop: 5}}>
+                    <Text style={{flex: 2}}>Building Name :</Text>
+                    <Text style={{flex: 3}}>{data.building_name}</Text>
+                </View>
+                <View style={{flexDirection: 'row', paddingTop: 5}}>
+                    <Text style={{flex: 2}}>Unit :</Text>
+                    <Text style={{flex: 3}}>{data.unit_name}</Text>
+                </View>
+                <View style={{flexDirection: 'row', paddingTop: 5}}>
+                    <Text style={{flex: 2}}>Content :</Text>
+                    <Text style={{flex: 3}}>{data.carried_content}</Text>
+                </View>
+                <View style={{flexDirection: 'row', paddingTop: 5}}>
+                    <Text style={{flex: 2}}>Trade Licence :</Text>
+                    <View style={{flex: 3}}>
+                        <TouchableOpacity style={{flex: 3, justifyContent: 'flex-start'}} onPress={() => {
+                        downloadFile(data.trade_licence)}}><FontAwesome icon={downloadIcon} style={{color: theme.colors.background, fontSize: 20}} /></TouchableOpacity>
+                    </View>
+                </View>
+                {showRnderIssuesPanel()}
             </View>
         )
     }
+  }
+
+  const issuesPanelIssues = () => {
+      setShowIssues(!showIssues);
+  }
+
+  useEffect(() => {
+      if(showIssues) {
+          setRejectButton('HIDE');
+      }else {
+          setRejectButton('REJECT');
+      }
+      showRnderIssuesPanel();
+  }, [showIssues])
+
+  const showRnderIssuesPanel = () => {
+      if(showIssues) {
+          return (
+            <View style={{flexDirection: 'column', justifyContent: 'center'}}>
+                <View style={{flexDirection: 'row', borderTopColor: theme.colors.backgroundColor, borderTopWidth: 0.8, paddingBottom: 5, justifyContent: 'space-between', alignItems: 'flex-start', marginTop: 10}}>
+                    <TextInput
+                        style={styles.textfield}
+                        placeholder="Please write issues"
+                        numberOfLines={5}
+                        value={reply}
+                        multiline={true}
+                        onChangeText={text => setReply(text)}
+                    />
+                </View>
+                <Button
+                    onPress={cancelHandle}
+                    mode="contained"
+                    style={{borderRadius: 5, backgroundColor: '#39b148'}}
+                >
+                    <Text
+                    style={{
+                        fontSize: 15,
+                        textAlign: 'center',
+                        color: theme.colors.primary
+                    }}>
+                    submit
+                    </Text>
+                </Button>
+            </View>
+          )
+      }else {
+          return(
+            <></>
+          )
+      }
   }
 
   const renderTitle = () => {
@@ -119,40 +305,6 @@ const Detail = ({route, navigation}) => {
                         </View>
                     </View>
                     {renderData()}
-                    <View style={{flexDirection: 'row', alignContent: 'flex-end', alignItems: 'flex-end', justifyContent: 'flex-end', marginTop: 20}}>
-                        <View style={{flexDirection: 'row'}}>
-                            <Button
-                                mode="contained"
-                                style={{borderRadius: 5, padding: 2, marginLeft: 5, marginRight: 5}}
-                                color={theme.colors.background}
-                                onPress={approvedHandle}
-                            >
-                                <Text
-                                style={{
-                                    fontSize: 15,
-                                    textAlign: 'center',
-                                    color: theme.colors.primary
-                                }}>
-                                Approved
-                                </Text>
-                            </Button>
-
-                            <Button
-                                onPress={cancelHandle}
-                                mode="contained"
-                                style={{borderRadius: 5, padding: 2, backgroundColor: '#39b148'}}
-                            >
-                                <Text
-                                style={{
-                                    fontSize: 15,
-                                    textAlign: 'center',
-                                    color: theme.colors.primary
-                                }}>
-                                Reject
-                                </Text>
-                            </Button>
-                        </View>
-                    </View>
                 </View>
             </View>
             <Toast />

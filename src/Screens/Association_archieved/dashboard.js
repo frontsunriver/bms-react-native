@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import LoadingActionContainer from '../../Components/LoadingActionContainer';
 import useAppTheme from '../../Themes/Context';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -18,6 +18,7 @@ const Dashboard = ({route, navigation}) => {
   const [user, setUser] = useState({});
   const [serverData, setServerData] = useState([]);
   const [viewMode, setViewMode] = useState(false);
+  const [statusColor, setStatusColor] = useState({color: theme.colors.background});
   const isFocused = useIsFocused();
   useEffect( async () => {
     var userInfo = JSON.parse(await AsyncStorage.getItem('USER_INFO'));
@@ -40,7 +41,28 @@ const Dashboard = ({route, navigation}) => {
           style={{justifyContent: 'center', alignItems: 'center', padding: 20}}>
               <View style={[styles.card, styles.shadowProp]}>
                 {serverData.map(data => {
-                  return <AssociationDashboardItem key={data.id} type="2" data={data}></AssociationDashboardItem>
+                  return (
+                    <TouchableOpacity onPress={() => {
+                      navigation.navigate(Routes.ASSOCIATION_ARCHIEVED_DETAIL_SCREEN, {data: data});
+                    }}>
+                      <View
+                      style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 20, borderBottomColor: '#e2e2e2', borderBottomWidth: 0.8}}>
+                          <View style={{flexDirection: 'column', alignItems: 'flex-start', alignContent: 'center'}}>
+                              <Text style={[{fontWeight: 'bold'}, data.status == 2 ? {color: '#00E01A'} : {color: '#d91414'}]}>{data.status == 2 ? 'Approved' : 'Rejected'}</Text>
+                              <Text>Date Created:</Text>
+                              <Text>{data.type == 3 ? data.carried_date : data.move_date}</Text>
+                          </View>
+                          <View style={{flexDirection: 'column', alignItems: 'flex-start', alignContent: 'center'}}>
+                              <Text>Building:</Text>
+                              <Text>{data.building_name}</Text>
+                          </View>
+                          <View style={{flexDirection: 'column', alignItems: 'flex-start', alignContent: 'center'}}>
+                              <Text>Unit:</Text>
+                              <Text>{data.unit_name}</Text>
+                          </View>
+                      </View>
+                    </TouchableOpacity>
+                  )
                 })}
               </View>
         </View>

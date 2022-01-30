@@ -30,6 +30,7 @@ const NocMoveIn = ({routes, navigation}) => {
   const [buildingData, setBuildingData] = useState([]);
   const [unitData, setUnitData] = useState([]);
   const [singleFile, setSingleFile] = useState(null);
+  const [carried_content, setCarried_content] = useState('');
 
   useEffect( async () => {
     let isMounted = true;    
@@ -136,6 +137,7 @@ const NocMoveIn = ({routes, navigation}) => {
     formData.append('building_id', dropdown);
     formData.append('unit_id', unitDropDown);
     formData.append('move_date', convertDateFormat(dateString));
+    formData.append('carried_content', carried_content);
     formData.append('user_id', user.id);
     formData.append('move_type', 3);
 
@@ -179,6 +181,14 @@ const NocMoveIn = ({routes, navigation}) => {
 
     if(!singleFile) {
       message = "Please select the Trade licence";
+      result = false;
+      res['success'] = result;
+      res['message'] = message;
+      return res;
+    }
+
+    if(carried_content == '') {
+      message = "Please insert the content";
       result = false;
       res['success'] = result;
       res['message'] = message;
@@ -271,6 +281,17 @@ const NocMoveIn = ({routes, navigation}) => {
                       <Text>{singleFile != null ? ( singleFile.type ? objCast(singleFile) : '' ) : 'Select File'}</Text>
                     </View>
                   </TouchableOpacity>
+                </View>
+                <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
+                  <Text style={{width: '50%', marginTop: 15}}>{t('Content')}</Text>
+                  <TextInput
+                    style={styles.textfield}
+                    placeholder="Please write content"
+                    numberOfLines={5}
+                    value={carried_content}
+                    multiline={true}
+                    onChangeText={text => setCarried_content(text)}
+                  />
                 </View>
                 <View style={{flexDirection: 'row', justifyContent: 'center', marginTop: 25}}>
                   <Button
