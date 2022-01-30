@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import LoadingActionContainer from '../../Components/LoadingActionContainer';
 import useAppTheme from '../../Themes/Context';
 import {useStoreState} from 'easy-peasy';
@@ -14,6 +14,7 @@ import { BASE_URL } from '../../Config';
 import { useIsFocused } from '@react-navigation/native';
 import Routes from '../../Navigation/Routes';
 import { useNavigation } from '@react-navigation/native';
+import { showErrorToast, showSuccessToast } from '../../Lib/Toast';
 
 const ManageOwners = ({route, navigation}) => {
   const {theme} = useAppTheme();
@@ -39,29 +40,91 @@ const ManageOwners = ({route, navigation}) => {
   const submitHandle = () => {
     navigate.navigate(Routes.ASSOCIATION_OWNER_DETAIL, {tmp: {}})
   }
+
+  const deleteOwner = (item) => {
+    Alert.alert(
+      "Confirm",
+      "Are you sure to delete?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel"
+        },
+        { text: "OK", onPress: () => {
+          axios.post(`${BASE_URL}/user/delete`, {id: item.id}).then( resp => {
+            if(resp.data.success) {
+              showSuccessToast('Delete Successfully');
+              var index = serverData.indexOf(item);
+              if (index !== -1) {
+                var tmp = serverData.filter((res1, i)=>{
+                  return index != i
+                });
+                setServerData(tmp);
+              }
+            }
+          }).catch(err => {
+            showErrorToast(err);
+          });
+        }}
+      ]
+    );
+    
+  }
   
   const renderView = () => {
     if(viewMode) {
       return (
         <View
           style={{justifyContent: 'center', alignItems: 'center', paddingLeft: 20, paddingRight: 20}}>
-              <View style={[styles.card, styles.shadowProp]}>
-                {serverData.map(data => {
-                  return (
+              {serverData.map(data => {
+                return (
+                  // <TouchableOpacity key={data.id} onPress={() => {navigate.navigate(Routes.ASSOCIATION_OWNER_BUILDINGS_UNITS, {data: data})}}>
+                  // <View
+                  // style={{borderRadius: 3, backgroundColor: '#ddd', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 20, borderBottomColor: '#e2e2e2', borderBottomWidth: 0.8, marginTop: 5}}>
+                  //     <View style={{flexDirection: 'column', justifyContent: "space-between", alignItems: 'flex-start', alignContent: 'center'}}>
+                  //         <View style={{flexDirection: 'row', justifyContent: 'space-between', alignContent: 'space-between'}}>
+                  //             <Text>{data.first_name}</Text>
+                  //             <Text>{data.last_name}</Text>
+                  //         </View>
+                  //     </View>
+                  // </View>
+                  // </TouchableOpacity>
+                  <View style={[styles.card, styles.shadowProp]}>
                     <TouchableOpacity key={data.id} onPress={() => {navigate.navigate(Routes.ASSOCIATION_OWNER_BUILDINGS_UNITS, {data: data})}}>
-                    <View
-                    style={{borderRadius: 3, backgroundColor: '#ddd', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 20, borderBottomColor: '#e2e2e2', borderBottomWidth: 0.8, marginTop: 5}}>
-                        <View style={{flexDirection: 'column', justifyContent: "space-between", alignItems: 'flex-start', alignContent: 'center'}}>
-                            <View style={{flexDirection: 'row', justifyContent: 'space-between', alignContent: 'space-between'}}>
-                                <Text>{data.first_name}</Text>
-                                <Text>{data.last_name}</Text>
-                            </View>
-                        </View>
-                    </View>
+                      <View
+                      style={{borderRadius: 3, padding: 20, borderBottomColor: '#ddd', borderBottomWidth: 2, }}>
+                          <View style={{flex: 1}}>
+                              <View style={{flexDirection: 'row', flex: 1}}>
+                                  <Text style={{flexDirection: 'row', marginLeft: 5, fontSize: 20}}>{data.first_name} {data.last_name}</Text>
+                              </View>
+                          </View>
+                      </View>
                     </TouchableOpacity>
-                  )
-                })}
-              </View>
+
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 5, paddingBottom: 10}}>
+                      
+                      <Button mode="contained" style={{borderRadius: 5, marginLeft: 5}} color={theme.colors.background}
+                        onPress={() => {
+                          navigate.navigate(Routes.ASSOCIATION_OWNER_DETAIL, {data: data})
+                        }}
+                      >
+                        <Text style={{ fontSize: 11, textAlign: 'center', color: theme.colors.primary }}>
+                          Edit
+                        </Text>
+                      </Button>
+                      <Button mode="contained" style={{borderRadius: 5, marginLeft: 5}} color={theme.colors.background}
+                        onPress={() => {
+                          deleteOwner(data);
+                        }}
+                      >
+                        <Text style={{ fontSize: 11, textAlign: 'center', color: theme.colors.primary }}>
+                          Delete
+                        </Text>
+                      </Button>
+                    </View>
+                  </View>
+                )
+              })}
         </View>
       )
     }else {

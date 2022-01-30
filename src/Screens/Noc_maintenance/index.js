@@ -237,7 +237,7 @@ const NocMoveIn = ({routes, navigation}) => {
                     placeholder="Select Unit"
                     value={unitDropDown}
                     onChange={item => {
-                    setUnitDropDown(item.id);
+                      setUnitDropDown(item.unit_id);
                     }}
                     // renderLeftIcon={() => (
                     //     <Image style={styles.icon} source={require('./assets/account.png')} />
@@ -261,9 +261,7 @@ const NocMoveIn = ({routes, navigation}) => {
                   </TouchableOpacity>
                 </View>
                 <View style={{borderBottomWidth: 1, borderBottomColor: '#e2e2e2', marginTop: 15}}></View>
-                <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-                  <Text style={{color: theme.colors.background, fontSize: 18, marginTop: 15}}>Please detail below works to be carried out</Text>
-                </View>
+                
                 <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
                   <Text style={{width: '50%', marginTop: 15}}>{t('Trade Licence')}</Text>
                   <TouchableOpacity

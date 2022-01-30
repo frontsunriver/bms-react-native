@@ -200,7 +200,7 @@ const NocMoveOut = ({routes, navigation}) => {
                     placeholder="Select Unit"
                     value={unitDropDown}
                     onChange={item => {
-                      setUnitDropDown(item.id);
+                      setUnitDropDown(item.unit_id);
                     }}
                     // renderLeftIcon={() => (
                     //     <Image style={styles.icon} source={require('./assets/account.png')} />

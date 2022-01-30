@@ -11,11 +11,16 @@ import Toast from 'react-native-tiny-toast';
 import { Button } from 'react-native-paper'
 import { showErrorToast, showSuccessToast } from '../../Lib/Toast';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
+import RNFetchBlob from 'rn-fetch-blob'
+import FontAwesome, { parseIconFromClassName, Icons } from 'react-native-fontawesome'
 
 const Detail = ({route, navigation}) => {
   const {t} = useTranslation();
   const {theme} = useAppTheme();
   const {data} = route.params;
+  const { config, fs } = RNFetchBlob;
+  const downloadIcon = parseIconFromClassName('fas fa-download')
+  let DownloadDir = fs.dirs.DownloadDir;
 
   const approvedHandle = (e) => {
     axios.post(`${BASE_URL}/move/update`, {id: data.id, status: 2}).then( res => {
@@ -43,6 +48,36 @@ const Detail = ({route, navigation}) => {
     });
   }
 
+  const fileDonwload = (url) => {
+    var extension = url.split('.').pop();
+    var fileName = new Date().getTime() + "." + extension;
+    let options = {
+        fileCache: true,
+        addAndroidDownloads : {
+          useDownloadManager : true, // setting it to true will use the device's native download manager and will be shown in the notification bar.
+          notification : false,
+          path:  DownloadDir + "/" + fileName, // this is the path where your downloaded file will live in
+          description : 'Downloading image.'
+        }
+      }
+      config(options).fetch('GET', `${DOWNLOAD_URL}` + url).then((res) => {
+        showSuccessToast("Download successfully. filename: " + fileName);
+      })
+  }
+
+  downloadFile = async (url) => {
+    try {
+        const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            fileDonwload(url);
+        } else {
+          Alert.alert('Permission Denied!', 'You need to give storage permission to download the file');
+        }
+    } catch (err) {
+        console.log(err);
+    } 
+  }
+
   const renderData = () => {
     if(data.move_type == 1) {
         return (
@@ -59,6 +94,10 @@ const Detail = ({route, navigation}) => {
                     <Text style={{flex: 3}}>{data.building_name}</Text>
                 </View>
                 <View style={{flexDirection: 'row', paddingTop: 5}}>
+                    <Text style={{flex: 2}}>Unit :</Text>
+                    <Text style={{flex: 3}}>{data.unit_name}</Text>
+                </View>
+                <View style={{flexDirection: 'row', paddingTop: 5}}>
                     <Text style={{flex: 2}}>Tenant Name :</Text>
                     <Text style={{flex: 3}}>{data.tenants_name}</Text>
                 </View>
@@ -70,9 +109,51 @@ const Detail = ({route, navigation}) => {
                     <Text style={{flex: 2}}>Tenant mobile :</Text>
                     <Text style={{flex: 3}}>{data.tenants_mobile}</Text>
                 </View>
+                <View style={{flexDirection: 'row', paddingTop: 5}}>
+                    <Text style={{flex: 2}}>Onwer Passport :</Text>
+                    <View style={{flex: 3}}>
+                        <TouchableOpacity style={{flex: 3, justifyContent: 'flex-start'}} onPress={() => {
+                        downloadFile(data.owner_passport)}}><FontAwesome icon={downloadIcon} style={{color: theme.colors.background, fontSize: 20}} /></TouchableOpacity>
+                    </View>
+                </View>
+                <View style={{flexDirection: 'row', paddingTop: 5}}>
+                    <Text style={{flex: 2}}>Title Deed :</Text>
+                    <View style={{flex: 3}}>
+                        <TouchableOpacity style={{flex: 3, justifyContent: 'flex-start'}} onPress={() => {
+                        downloadFile(data.title_deed)}}><FontAwesome icon={downloadIcon} style={{color: theme.colors.background, fontSize: 20}} /></TouchableOpacity>
+                    </View>
+                </View>
+                <View style={{flexDirection: 'row', paddingTop: 5}}>
+                    <Text style={{flex: 2}}>Tenancy Contract :</Text>
+                    <View style={{flex: 3}}>
+                        <TouchableOpacity style={{flex: 3, justifyContent: 'flex-start'}} onPress={() => {
+                        downloadFile(data.contract)}}><FontAwesome icon={downloadIcon} style={{color: theme.colors.background, fontSize: 20}} /></TouchableOpacity>
+                    </View>
+                </View>
+                <View style={{flexDirection: 'row', paddingTop: 5}}>
+                    <Text style={{flex: 2}}>Tenants Passport :</Text>
+                    <View style={{flex: 3}}>
+                        <TouchableOpacity style={{flex: 3, justifyContent: 'flex-start'}} onPress={() => {
+                        downloadFile(data.tenants_passport)}}><FontAwesome icon={downloadIcon} style={{color: theme.colors.background, fontSize: 20}} /></TouchableOpacity>
+                    </View>
+                </View>
+                <View style={{flexDirection: 'row', paddingTop: 5}}>
+                    <Text style={{flex: 2}}>Tenants Visa :</Text>
+                    <View style={{flex: 3}}>
+                        <TouchableOpacity style={{flex: 3, justifyContent: 'flex-start'}} onPress={() => {
+                        downloadFile(data.tenants_visa)}}><FontAwesome icon={downloadIcon} style={{color: theme.colors.background, fontSize: 20}} /></TouchableOpacity>
+                    </View>
+                </View>
+                <View style={{flexDirection: 'row', paddingTop: 5}}>
+                    <Text style={{flex: 2}}>Tenants Emirates ID :</Text>
+                    <View style={{flex: 3}}>
+                        <TouchableOpacity style={{flex: 3, justifyContent: 'flex-start'}} onPress={() => {
+                        downloadFile(data.tenants_emirates_id)}}><FontAwesome icon={downloadIcon} style={{color: theme.colors.background, fontSize: 20}} /></TouchableOpacity>
+                    </View>
+                </View>
             </View>
         )
-    }else {
+    }else if (data.move_type == 2){
         return (
             <View style={{flexDirection: 'column', marginTop: 5}}>
                 <View style={{flexDirection: 'row', paddingTop: 5}}>
@@ -86,6 +167,38 @@ const Detail = ({route, navigation}) => {
                 <View style={{flexDirection: 'row', paddingTop: 5}}>
                     <Text style={{flex: 2}}>Building Name :</Text>
                     <Text style={{flex: 3}}>{data.building_name}</Text>
+                </View>
+                <View style={{flexDirection: 'row', paddingTop: 5}}>
+                    <Text style={{flex: 2}}>Unit :</Text>
+                    <Text style={{flex: 3}}>{data.unit_name}</Text>
+                </View>
+            </View>
+        )
+    } else {
+        return (
+            <View style={{flexDirection: 'column', marginTop: 5}}>
+                <View style={{flexDirection: 'row', paddingTop: 5}}>
+                    <Text style={{flex: 2}}>Request User: </Text>
+                    <View style={{flexDirection: 'row', flex: 3}}>
+                        <Text>{data.first_name} </Text>
+                        <Text>{data.first_name}</Text>
+                    </View>
+                    
+                </View>
+                <View style={{flexDirection: 'row', paddingTop: 5}}>
+                    <Text style={{flex: 2}}>Building Name :</Text>
+                    <Text style={{flex: 3}}>{data.building_name}</Text>
+                </View>
+                <View style={{flexDirection: 'row', paddingTop: 5}}>
+                    <Text style={{flex: 2}}>Unit :</Text>
+                    <Text style={{flex: 3}}>{data.unit_name}</Text>
+                </View>
+                <View style={{flexDirection: 'row', paddingTop: 5}}>
+                    <Text style={{flex: 2}}>Trade Licence :</Text>
+                    <View style={{flex: 3}}>
+                        <TouchableOpacity style={{flex: 3, justifyContent: 'flex-start'}} onPress={() => {
+                        downloadFile(data.trade_licence)}}><FontAwesome icon={downloadIcon} style={{color: theme.colors.background, fontSize: 20}} /></TouchableOpacity>
+                    </View>
                 </View>
             </View>
         )

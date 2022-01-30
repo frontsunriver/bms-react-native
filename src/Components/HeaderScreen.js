@@ -17,6 +17,7 @@ const HeaderScreen = (props) => {
     const [iconType, setIconType] = useState('back');
     const drawIcon = parseIconFromClassName('fas fa-bars')
     const leftIcon = parseIconFromClassName('fas fa-chevron-left')
+    const homeIcon = parseIconFromClassName('fas fa-home');
     
     useEffect(() => {
       let isMounted = true;    
@@ -57,7 +58,7 @@ const HeaderScreen = (props) => {
 
     const handleBack = () => {
       if(type == 'home') {
-        NavigationService.navigate(association ? Routes.ASSOCIATION_REQUEST_SCREEN : Routes.HOME_SCREEN)
+        NavigationService.navigate(association ? Routes.ASSOCIATION_HOME_SCREEN : Routes.HOME_SCREEN)
       }else {
         navigation.goBack();
       }
@@ -120,6 +121,10 @@ const HeaderScreen = (props) => {
         )
       }
     }
+
+    const goHome = () => {
+      NavigationService.navigate(association ? Routes.ASSOCIATION_HOME_SCREEN : Routes.HOME_SCREEN)
+    }
     
     return (
         <View
@@ -145,16 +150,8 @@ const HeaderScreen = (props) => {
               >
                 {showIconRender()}
                 {renderHeaderString()}
-                <TouchableOpacity>
-                  <Image
-                    source={require('../../hero/ellipse.png')}
-                    style={{
-                      aspectRatio: 1,
-                      resizeMode: 'contain',
-                      width: 20,
-                      height: 20
-                    }}
-                  />
+                <TouchableOpacity onPress={goHome}>
+                  <FontAwesome icon={homeIcon} style={{color: theme.colors.primary, fontSize: 20}} />
                 </TouchableOpacity>
               </View>
               <View style={{

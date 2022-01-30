@@ -52,10 +52,9 @@ const OwnerDetail = ({route, navigation}) => {
       return (
         <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
           <Text style={{width: '50%', marginTop: 15}}>Password</Text>
-          <TextInput style={styles.textfield} value={password} onChangeText={text => setPassword(text)}/>
+          <TextInput style={styles.textfield} value={password} secureTextEntry={true} onChangeText={text => setPassword(text)}/>
         </View>
       )
-      
     }
   }
 

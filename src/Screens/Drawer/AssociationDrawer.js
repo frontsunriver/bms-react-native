@@ -115,7 +115,7 @@ const Content = () => {
         </TouchableX>
         
         <TouchableX border onPress={() => {
-          NavigationService.navigate(Routes.ASSOCIATION_SEARCH_SCREEN)
+          NavigationService.navigate(Routes.ASSOCIATION_SETTINGS_SCREEN)
         }}>
           <View style={{padding: 16, flexDirection: 'row'}}>
             <FontAwesome icon={settingIcon} style={{color: theme.colors.primary, fontSize: 15}} />

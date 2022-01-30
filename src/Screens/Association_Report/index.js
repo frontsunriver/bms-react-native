@@ -22,44 +22,31 @@ const Settings = ({routes, navigation}) => {
   const [loading, setLoading] = useState(false);
   const [showProgress, setShowProgress] = useState(false);
   const [progresStatus, setProgressStatus] = useState(0);
-  const {fs} = RNFetchBlob;
+  const { config, fs } = RNFetchBlob;
+  let DownloadDir = fs.dirs.DownloadDir;
 
   const importHandle = async () => {
     setLoading(true);
     await axios.get(`${BASE_URL}generate/excel`).then( async (res) => { 
       if(res.data.success) {
-        granted = await PermissionsAndroid.requestMultiple([
-          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-        ]);
-        if (granted['android.permission.READ_EXTERNAL_STORAGE'] && granted['android.permission.WRITE_EXTERNAL_STORAGE']) {
-          let dirs = Platform.OS == 'ios'
-          ? RNFetchBlob.fs.dirs.DocumentDir
-          : RNFetchBlob.fs.dirs.DocumentDir;
-        
-          setShowProgress(true);
-          RNFetchBlob
-          .config({
-            path : dirs + "/" + res.data.data,
-            background: true,
+        var extension = res.data.data.split('.').pop();
+        var fileName = new Date().getTime() + "." + extension;
+        let options = {
             fileCache: true,
-            timeout: 1000 * 60 * 15 //15 minutes
-          })
-          .fetch('GET', DOWNLOAD_URL + "uploads/" + res.data.data, {
-          }).
-          progress({count: 10}, (received, total) => {
-            setProgressStatus(received / total)
-          }).then(res1 => {
-            console.log('The file saved to ', res1.path());
+            addAndroidDownloads : {
+              useDownloadManager : true, // setting it to true will use the device's native download manager and will be shown in the notification bar.
+              notification : false,
+              path:  DownloadDir + "/" + fileName, // this is the path where your downloaded file will live in
+              description : 'Downloading image.'
+            }
+          }
+          config(options).fetch('GET', `${DOWNLOAD_URL}/uploads/` + res.data.data).then((res1) => {
+            showSuccessToast("Download successfully. filename: " + fileName);
             setLoading(false);
-            setShowProgress(false);
-            setProgressStatus(0);
-            ReactNativeFS.copyFile(RNFetchBlob.fs.dirs.DownloadDir + "/" + res.data.data, res1.path())
-            showSuccessToast("Download file successfully.");
-          }).catch(error => {
-            console.log(error);
-          })
-        }
+          }).catch(err => {
+            console.log(err);
+            setLoading(false);
+          }) 
       }else {
         setShowProgress(false);
         setLoading(false);
@@ -71,6 +58,19 @@ const Settings = ({routes, navigation}) => {
       setLoading(false);
       showErrorToast('Something went wrong! Please try again.');
     });
+  }
+
+  downloadFile = async () => {
+    try {
+        const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          importHandle();
+        } else {
+          Alert.alert('Permission Denied!', 'You need to give storage permission to download the file');
+        }
+    } catch (err) {
+        console.log(err);
+    } 
   }
 
   if(showProgress) {
@@ -97,9 +97,9 @@ const Settings = ({routes, navigation}) => {
                     <Button
                       loading = {loading}
                       mode="contained"
-                      style={{borderRadius: 5, marginLeft: 30, marginRight: 30, padding: 5}}
+                      style={{borderRadius: 30, marginLeft: 30, marginRight: 30, padding: 5}}
                       color={theme.colors.background}
-                      onPress={importHandle}
+                      onPress={downloadFile}
                     >
                       <Text
                         style={{

@@ -37,7 +37,7 @@ const AssociationDashboardItem = (props) => {
             </View>
             <View style={{flexDirection: 'column', alignItems: 'flex-start', alignContent: 'center'}}>
                 <Text>Unit:</Text>
-                <Text>{data.user_id}</Text>
+                <Text>{data.unit_name}</Text>
             </View>
         </View>
         </TouchableOpacity>
